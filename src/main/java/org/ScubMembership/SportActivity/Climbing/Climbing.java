@@ -11,7 +11,8 @@ public class Climbing extends abs_sport {
                 "Salewa",
                 2,
                 "Climbers use ropes and gear to ascend a climbing wall. Safety and technique are crucial.",
-                true
+                true,
+                "Self-managed"
         );
     }
 }

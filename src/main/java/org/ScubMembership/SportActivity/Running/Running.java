@@ -10,7 +10,8 @@ public class Running extends abs_sport {
                 "Outdoor",
                 1,
                 "Participants run over a set distance on a track or route. The fastest runner wins.",
-                false
+                false,
+                "Self-managed"
         );
     }
 }
