@@ -25,20 +25,35 @@ public class RegistrationProcess {
         public void startRegistration() {
             System.out.println("=== User Registration ===");
 
-            System.out.print("Enter email: ");
-            String email = scanner.nextLine();
-            while(!EmailValidator.isValidEmail(email)) {
-                System.out.println("Your E-Mail address is invalid");
-                System.out.print("Enter email: ");
-                email = scanner.nextLine();
+            String email;
+            while (true){
+                System.out.println("Enter email: ");
+                email = scanner.nextLine().trim();
+
+                if(!EmailValidator.isValidEmail(email)){
+                    System.out.println("Your E-Mail address is invalid.");
+                    continue;
+                }
+
+                boolean emailAddressAlreadyUsed = false;
+                for (NormalUser user : loginPage.getLoginInfo().values()) {
+                    if (user.getEmail().equalsIgnoreCase(email)) {
+                        System.out.println("An account with this email already exists.");
+                        emailAddressAlreadyUsed = true;
+                        break;
+                    }
+                }
+
+                if (!emailAddressAlreadyUsed) break;
             }
 
             System.out.print("Enter username: ");
             String username = scanner.nextLine().trim();
 
-            if (loginPage.getLoginInfo().containsKey(username)) {
+            while (loginPage.getLoginInfo().containsKey(username)) {
                 System.out.println("Username already exists. Please choose a different one.");
-                return;
+                System.out.print("Enter username: ");
+                username = scanner.nextLine().trim();
             }
 
             System.out.print("Enter password: ");
