@@ -1,5 +1,6 @@
 package org.ScubMembership.Utils;
 
+import org.ScubMembership.Login.AdminFunctions.AdminMenu;
 import org.ScubMembership.Login.LoginFunctions.StartLoginProcess;
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.Registration.RegistrationProcess;
@@ -35,7 +36,7 @@ public class Welcome {
                     if (adminInfo.containsKey(username) && adminInfo.get(username).getPassword().equals(password)) {
                         System.out.println("👑 Admin login successful!");
                         Admin admin = adminInfo.get(username);
-                        org.ScubMembership.Login.AdminMenu.show(admin); // Make sure you implement this class
+                        AdminMenu.show(admin); // Make sure you implement this class
                         running = false;
                     } else {
                         StartLoginProcess loginProcess = new StartLoginProcess(loginPage);

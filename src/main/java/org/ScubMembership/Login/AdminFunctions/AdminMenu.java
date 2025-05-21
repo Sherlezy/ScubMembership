@@ -1,4 +1,4 @@
-package org.ScubMembership.Login;
+package org.ScubMembership.Login.AdminFunctions;
 
 import org.ScubMembership.Users.Admin.Admin;
 import org.ScubMembership.Utils.AdminStorage;
