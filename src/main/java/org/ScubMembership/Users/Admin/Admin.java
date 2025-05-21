@@ -1,5 +1,9 @@
 package org.ScubMembership.Users.Admin;
-public class Admin {
+
+import java.io.Serializable;
+
+public class Admin implements Serializable {
+    private static final long serialVersionUID = 1L;
     public String email;
     public String username;
     public String password;
