@@ -23,6 +23,8 @@ public class LoginMenu {
             System.out.println("1. Change Password");
             System.out.println("2. View User Details");
             System.out.println("3. Logout");
+            System.out.println("4. Join General Chat");
+
             System.out.print("Option: ");
 
             String option = scanner.nextLine();
@@ -41,6 +43,10 @@ public class LoginMenu {
                     logout.startLogout();
                     running = false;
                     break;
+                case "4":
+                    org.ScubMembership.ChatSystem.ChatClient.startChat(loginPage.getCurrentUser().getUsername());
+                    break;
+
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
