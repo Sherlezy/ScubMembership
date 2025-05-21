@@ -1,0 +1,22 @@
+package org.ScubMembership.Login.LoginFunctions;
+
+import org.ScubMembership.Login.LoginPage;
+import org.ScubMembership.Utils.Welcome;
+
+public class Logout {
+
+    private LoginPage loginPage;
+
+    public Logout(LoginPage loginPage){
+        this.loginPage = loginPage;
+    }
+
+    public void startLogout(){
+        System.out.println("Logging out...");
+        loginPage.setLoggedIn(false);
+        loginPage.setCurrentUser(null);
+        System.out.println("Logged out successfully!");
+        Welcome.welcome();
+    }
+
+}
