@@ -9,26 +9,30 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Welcome {
-    public static void welcome(){
-        HashMap<String, NormalUser> loginInfo = new HashMap<>();
+    public static void welcome(HashMap<String, NormalUser> loginInfo){
         LoginPage loginPage = new LoginPage(loginInfo);
-        Scanner sc = new Scanner(System.in);
+        Scanner sc = loginPage.getScanner();
 
         System.out.println("===== Welcome to SCUB portal =====");
         System.out.println("Are you a new user? Press 1 to proceed with registration. Otherwise press 2 to log in");
-        String choice = sc.nextLine();
 
-        switch (choice){
-            case "1":
-                RegistrationProcess registration = new RegistrationProcess(loginPage);
-                registration.startRegistration();
-                break;
-            case "2":
-                StartLoginProcess loginProcess = new StartLoginProcess(loginPage);
-                loginProcess.startLoginProcess();
-                break;
-            default:
-                System.out.println("Please select 1 or 2");
+        boolean running = true;
+        while (running){
+            String choice = sc.nextLine();
+            switch (choice) {
+                case "1":
+                    RegistrationProcess registration = new RegistrationProcess(loginPage);
+                    registration.startRegistration();
+                    running = false;
+                    break;
+                case "2":
+                    StartLoginProcess loginProcess = new StartLoginProcess(loginPage);
+                    loginProcess.startLoginProcess();
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Please select 1 or 2");
+            }
         }
     }
 
