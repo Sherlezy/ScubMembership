@@ -6,10 +6,14 @@ import java.io.*;
 import java.util.HashMap;
 
 public class AdminStorage {
-    private static final String FILE_PATH = "admins.ser";
+    private static String filePath = "admins.ser";
+
+    public static void setFilePath(String newPath) {
+        filePath = newPath;
+    }
 
     public static void saveAdmins(HashMap<String, Admin> admins) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
             out.writeObject(admins);
             System.out.println("✅ Admin data saved.");
         } catch (IOException e) {
@@ -19,7 +23,7 @@ public class AdminStorage {
 
     @SuppressWarnings("unchecked")
     public static HashMap<String, Admin> loadAdmins() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
             return (HashMap<String, Admin>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("⚠️ No existing admin data found.");
