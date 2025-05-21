@@ -2,6 +2,7 @@ package org.ScubMembership.Login.LoginFunctions;
 
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.Users.NormalUser.NormalUser;
+import org.ScubMembership.Utils.UserStorage;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -31,7 +32,9 @@ public class ChangePassword {
 
             if (newPassword.equals(confirmPassword)) {
                 currentUser.setPassword(newPassword);
+                UserStorage.saveUsers(loginInfo);
                 System.out.println("Password changed successfully!");
+
             } else System.out.println("Passwords do not match. No changes made.");
         } else System.out.println("Incorrect current password. No changes made.");
     }

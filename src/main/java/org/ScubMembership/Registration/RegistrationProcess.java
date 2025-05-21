@@ -4,6 +4,7 @@ import org.ScubMembership.Login.LoginFunctions.LoginMenu;
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.Users.NormalUser.NormalUser;
 import org.ScubMembership.Utils.EmailValidator;
+import org.ScubMembership.Utils.UserStorage;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -71,6 +72,8 @@ public class RegistrationProcess {
             loginPage.getLoginInfo().put(username, newUser);
             loginPage.setCurrentUser(newUser);
             loginPage.setLoggedIn(true);
+            UserStorage.saveUsers(loginPage.getLoginInfo());
+
 
             System.out.println("User registered successfully!\n");
 
