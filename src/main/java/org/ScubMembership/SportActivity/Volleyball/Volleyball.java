@@ -12,7 +12,8 @@ public class Volleyball extends abs_sport {
                 12,
                 "Two teams of six players each try to score by grounding the ball on the opponent’s court. "
                         + "Matches are played in sets, and the first team to win 3 sets wins the match.",
-                true
+                true,
+                "Riccardo Guerrieri"
         );
     }
 }

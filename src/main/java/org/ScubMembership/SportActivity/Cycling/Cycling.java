@@ -11,7 +11,8 @@ public class Cycling extends abs_sport {
                 "Outdoor Routes",
                 1,
                 "Cyclist race or train on bikes along roads or tracks, following distance and safety rules",
-                false
+                false,
+                "Self-managed"
         );
     }
 }
