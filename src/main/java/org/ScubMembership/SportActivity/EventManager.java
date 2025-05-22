@@ -1,6 +1,4 @@
-package org.ScubMembership.Login.AdminFunctions;
-
-import org.ScubMembership.SportActivity.abs_sport;
+package org.ScubMembership.SportActivity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -62,7 +60,15 @@ public class EventManager {
         }
     }
 
+    public static void addEvent(SportEvent event) {
+        events.add(event);
+    }
+
     public static List<SportEvent> getEvents() {
         return events;
+    }
+
+    public static void clearEvents() {
+        events.clear();
     }
 }
