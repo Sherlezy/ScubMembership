@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class LoginPage {
-    protected HashMap<String, NormalUser> loginInfo;
-    protected Scanner scanner;
+    protected final HashMap<String, NormalUser> loginInfo;
+    protected final Scanner scanner;
     protected boolean loggedIn;
     protected NormalUser currentUser;
 

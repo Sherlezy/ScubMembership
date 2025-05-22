@@ -7,7 +7,6 @@ import org.ScubMembership.Utils.UserStorage;
 import org.ScubMembership.Utils.Welcome;
 
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class Logout {
 
