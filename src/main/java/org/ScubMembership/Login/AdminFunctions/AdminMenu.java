@@ -1,8 +1,20 @@
 package org.ScubMembership.Login.AdminFunctions;
 
+import org.ScubMembership.SportActivity.Basketball.Basketball;
+import org.ScubMembership.SportActivity.Climbing.Climbing;
+import org.ScubMembership.SportActivity.CustomSport.CustomSport;
+import org.ScubMembership.SportActivity.Cycling.Cycling;
+import org.ScubMembership.SportActivity.Football.Football;
+import org.ScubMembership.SportActivity.Running.Running;
+import org.ScubMembership.SportActivity.Swimming.Swimming;
+import org.ScubMembership.SportActivity.Tennis.Tennis;
+import org.ScubMembership.SportActivity.Volleyball.Volleyball;
+import org.ScubMembership.SportActivity.Yoga.Yoga;
+import org.ScubMembership.SportActivity.abs_sport;
 import org.ScubMembership.Users.Admin.Admin;
 import org.ScubMembership.Utils.AdminStorage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -10,6 +22,17 @@ public class AdminMenu {
     public static void show(Admin admin) {
         Scanner scanner = new Scanner(System.in);
         HashMap<String, Admin> admins = AdminStorage.loadAdmins();
+        ArrayList<abs_sport> sports = new ArrayList<>();
+
+        sports.add(new Basketball());
+        sports.add(new Football());
+        sports.add(new Volleyball());
+        sports.add(new Climbing());
+        sports.add(new Cycling());
+        sports.add(new Running());
+        sports.add(new Swimming());
+        sports.add(new Tennis());
+        sports.add(new Yoga());
 
         boolean running = true;
         while (running) {
@@ -17,6 +40,8 @@ public class AdminMenu {
             System.out.println("1. View all admins");
             System.out.println("2. Add new admin");
             System.out.println("3. Exit admin panel");
+            System.out.println("4. Add new sport");
+            System.out.println("5. Create a sport event");
             System.out.print("Option: ");
             String option = scanner.nextLine();
 
@@ -48,6 +73,44 @@ public class AdminMenu {
                     break;
                 case "3":
                     running = false;
+                    break;
+                case "4":
+                    System.out.println("Enter sport name: ");
+                    String sportName = scanner.nextLine();
+
+                    System.out.println("Enter equipment items (comma-separated): ");
+                    String[] equipment = scanner.nextLine().split(",");
+
+                    for(int i = 0; i < equipment.length; i++) {
+                        equipment[i] = equipment[i].trim();
+                    }
+
+                    System.out.println("Enter gym name: ");
+                    String gymName = scanner.nextLine();
+
+                    System.out.println("Enter number of players: ");
+                    int numberOfPlayers = Integer.parseInt(scanner.nextLine());
+
+                    System.out.println("Enter the rules of the sport: ");
+                    String rules = scanner.nextLine();
+
+                    System.out.println("Is it an indoor sport (yes/no): ");
+                    boolean isIndoor = scanner.nextLine().trim().equalsIgnoreCase("yes");
+
+                    System.out.println("Enter the name and surname of the person in charge: ");
+                    String personInCharge = scanner.nextLine();
+
+                    abs_sport customSport = new CustomSport(sportName, equipment, gymName, numberOfPlayers, rules, isIndoor, personInCharge);
+                    sports.add(customSport);
+
+                    System.out.println("✅Sport \"" + sportName + "\" added successfully.");
+                    break;
+                case "5":
+                    if(sports.isEmpty()) {
+                        System.out.println("⚠\uFE0F No sports available. Please add a sport first.");
+                    } else {
+                        EventManager.createEvent(sports);
+                    }
                     break;
                 default:
                     System.out.println("Invalid option.");
