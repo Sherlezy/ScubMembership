@@ -6,6 +6,7 @@ import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.QuizzSystem.LeaderboardDisplay;
 import org.ScubMembership.QuizzSystem.QuizMenu;
 import org.ScubMembership.QuizzSystem.QuizRunner;
+import org.ScubMembership.SportActivity.SportRegistry;
 
 import java.util.List;
 import java.util.Scanner;
@@ -29,7 +30,7 @@ public class LoginMenu {
             System.out.println("1. Change Password");
             System.out.println("2. View User Details");
             System.out.println("3. Logout");
-            System.out.println("4. Join General Chat");
+            System.out.println("4. Join a Sport Chat");
             System.out.println("5. Take your Favourite Sport Quiz");
             System.out.println("6. Take a Quiz for Another Sport");
             System.out.println("7. View a Sport's Leaderboard");
@@ -49,10 +50,30 @@ public class LoginMenu {
                     running = false;
                     break;
                 case "4":
-                    org.ScubMembership.ChatSystem.ChatClient.startChat(
-                            loginPage.getCurrentUser().getUsername()
-                    );
+                    System.out.println("\n🏟️ Available sport chat rooms:");
+                    for (int i = 0; i < SportRegistry.SPORTS.size(); i++) {
+                        System.out.println((i + 1) + ". " + SportRegistry.SPORTS.get(i).getName());
+                    }
+
+                    System.out.print("Enter number to join chat: ");
+                    String input = scanner.nextLine();
+
+                    try {
+                        int sportChoice = Integer.parseInt(input);
+                        if (sportChoice < 1 || sportChoice > SportRegistry.SPORTS.size()) {
+                            System.out.println("❌ Invalid sport number.");
+                            break;
+                        }
+
+                        String selectedSport = SportRegistry.SPORTS.get(sportChoice - 1).getName();
+                        org.ScubMembership.ChatSystem.ChatClient.startSportChat(
+                                selectedSport, loginPage.getCurrentUser().getUsername()
+                        );
+                    } catch (NumberFormatException e) {
+                        System.out.println("❌ Please enter a valid number.");
+                    }
                     break;
+
                 case "8":
                     String favSport = loginPage.getCurrentUser().getPreferredSport();
                     QuizRunner.startQuiz(favSport, scanner, loginPage.getCurrentUser());
