@@ -1,4 +1,4 @@
-package org.ScubMembership.Utils;
+package org.ScubMembership.PasswordSecurity;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
