@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class AdminStorage {
-    private static String filePath = "admins.ser";
+    private static String filePath = "Storage/admins.ser";
 
     public static void setFilePath(String newPath) {
         filePath = newPath;

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class QuizLeaderboardManager {
-    private static final String FILE_PATH = "quiz_leaderboard.ser";
+    private static final String FILE_PATH = "Storage/quiz_leaderboard.ser";
     private static List<QuizLeaderboardEntry> leaderboard = load();
 
     public static void addEntry(String username, String sport, int score, boolean isFavorite) {
