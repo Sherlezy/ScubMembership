@@ -16,6 +16,7 @@ public class ViewUserDetails {
         System.out.println("ID: " + loginPage.getCurrentUser().getID());
         System.out.println("Username: " + loginPage.getCurrentUser().getUsername());
         System.out.println("Password: " + "*".repeat(loginPage.getCurrentUser().getPassword().length()));
+        System.out.println(("Favorite sport: " + loginPage.getCurrentUser().getPreferredSport()));
     }
 
 
