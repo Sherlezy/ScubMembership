@@ -1,53 +1,48 @@
 package org.ScubMembership.SportActivity;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SportEvent implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class SportEvent {
+    private abs_sport sport;
+    private LocalDateTime dateTime;
+    private int maxParticipants;
+    private List<String> registeredUsers = new ArrayList<>();
 
-    private final String sportName;
-    private final String eventName;
-    private final String date;
-    private final int maxParticipants;
-    private final Set<String> registeredUsers;
-
-    public SportEvent(String sportName, String eventName, String date, int maxParticipants) {
-        this.sportName = sportName;
-        this.eventName = eventName;
-        this.date = date;
+    public SportEvent(abs_sport sport, LocalDateTime dateTime, int maxParticipants) {
+        this.sport = sport;
+        this.dateTime = dateTime;
         this.maxParticipants = maxParticipants;
-        this.registeredUsers = new HashSet<>();
     }
 
-    public String getSportName() {
-        return sportName;
+    public boolean registerUser(String username) {
+        if(registeredUsers.size() >= maxParticipants || registeredUsers.contains(username)) {
+            return false;
+        }
+        registeredUsers.add(username);
+        return true;
     }
 
-    public String getEventName() {
-        return eventName;
+    public List<String> getRegisteredUsers() {
+        return registeredUsers;
     }
 
-    public String getDate() {
-        return date;
+    public abs_sport getSport() {
+        return sport;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     public int getMaxParticipants() {
         return maxParticipants;
     }
 
-    public Set<String> getRegisteredUsers() {
-        return registeredUsers;
-    }
-
-    public boolean registerUser(String username) {
-        if (registeredUsers.size() >= maxParticipants) return false;
-        return registeredUsers.add(username);
-    }
-
     @Override
     public String toString() {
-        return eventName + " (" + sportName + ") on " + date + " [" + registeredUsers.size() + "/" + maxParticipants + " registered]";
+        return "Event for " + sport.getName() + " on " + dateTime + " (Max " + maxParticipants + ", Registered: " +
+                registeredUsers.size() + ")";
     }
 }

@@ -1,7 +1,7 @@
 package org.ScubMembership.Login.LoginFunctions;
 
-import org.ScubMembership.Login.AdminFunctions.EventManager;
-import org.ScubMembership.Login.AdminFunctions.SportEvent;
+import org.ScubMembership.SportActivity.EventManager;
+import org.ScubMembership.SportActivity.SportEvent;
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.QuizzSystem.LeaderboardDisplay;
 import org.ScubMembership.QuizzSystem.QuizMenu;

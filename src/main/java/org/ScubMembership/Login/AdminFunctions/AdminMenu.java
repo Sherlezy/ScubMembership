@@ -5,6 +5,7 @@ import org.ScubMembership.SportActivity.Basketball.Basketball;
 import org.ScubMembership.SportActivity.Climbing.Climbing;
 import org.ScubMembership.SportActivity.CustomSport.CustomSport;
 import org.ScubMembership.SportActivity.Cycling.Cycling;
+import org.ScubMembership.SportActivity.EventManager;
 import org.ScubMembership.SportActivity.Football.Football;
 import org.ScubMembership.SportActivity.Running.Running;
 import org.ScubMembership.SportActivity.SportRegistry;
