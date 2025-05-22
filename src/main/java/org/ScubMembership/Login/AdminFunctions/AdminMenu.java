@@ -49,6 +49,7 @@ public class AdminMenu {
                 case "3":
                     running = false;
                     break;
+
                 default:
                     System.out.println("Invalid option.");
             }
