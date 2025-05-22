@@ -11,8 +11,21 @@ import org.ScubMembership.SportActivity.Volleyball.Volleyball;
 import org.ScubMembership.SportActivity.Yoga.Yoga;
 import org.ScubMembership.SportActivity.abs_sport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SportRegistry {
-    public static final List<abs_sport> SPORTS = List.of(new Tennis(), new Basketball(),new Climbing(), new Cycling(), new Football(), new Running(), new Swimming(), new Volleyball(), new Yoga());
+    public static final List<abs_sport> SPORTS = new ArrayList<>();
+
+    static {
+        SPORTS.add(new Tennis());
+        SPORTS.add(new Basketball());
+        SPORTS.add(new Football());
+        SPORTS.add(new Yoga());
+        SPORTS.add(new Swimming());
+        SPORTS.add(new Cycling());
+        SPORTS.add(new Climbing());
+        SPORTS.add(new Volleyball());
+        SPORTS.add(new Running());
+    }
 }
