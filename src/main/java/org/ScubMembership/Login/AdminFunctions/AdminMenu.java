@@ -1,11 +1,13 @@
 package org.ScubMembership.Login.AdminFunctions;
 
+import org.ScubMembership.QuizzSystem.QuizQuestion;
 import org.ScubMembership.SportActivity.Basketball.Basketball;
 import org.ScubMembership.SportActivity.Climbing.Climbing;
 import org.ScubMembership.SportActivity.CustomSport.CustomSport;
 import org.ScubMembership.SportActivity.Cycling.Cycling;
 import org.ScubMembership.SportActivity.Football.Football;
 import org.ScubMembership.SportActivity.Running.Running;
+import org.ScubMembership.SportActivity.SportRegistry;
 import org.ScubMembership.SportActivity.Swimming.Swimming;
 import org.ScubMembership.SportActivity.Tennis.Tennis;
 import org.ScubMembership.SportActivity.Volleyball.Volleyball;
@@ -16,6 +18,7 @@ import org.ScubMembership.Utils.AdminStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
@@ -42,6 +45,8 @@ public class AdminMenu {
             System.out.println("3. Exit admin panel");
             System.out.println("4. Add new sport");
             System.out.println("5. Create a sport event");
+            System.out.println("6. Add quiz question");
+
             System.out.print("Option: ");
             String option = scanner.nextLine();
 
@@ -112,6 +117,51 @@ public class AdminMenu {
                         EventManager.createEvent(sports);
                     }
                     break;
+                case "6":
+                    String selectedSportName = null;
+
+                    while (true) {
+                        System.out.println("Choose a sport to add the quiz to:");
+                        for (int i = 0; i < SportRegistry.SPORTS.size(); i++) {
+                            System.out.println((i + 1) + ". " + SportRegistry.SPORTS.get(i).getName());
+                        }
+
+                        System.out.print("Option (1-" + SportRegistry.SPORTS.size() + "): ");
+                        String input = scanner.nextLine();
+
+                        try {
+                            int choice = Integer.parseInt(input);
+                            if (choice >= 1 && choice <= SportRegistry.SPORTS.size()) {
+                                selectedSportName = SportRegistry.SPORTS.get(choice - 1).getName();
+                                break;
+                            } else {
+                                System.out.println("❌ Invalid number. Please try again.");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("❌ Please enter a valid number.");
+                        }
+                    }
+
+                    List<QuizQuestion> quiz = org.ScubMembership.Quiz.QuizManager.loadQuiz(selectedSportName);
+
+                    System.out.print("Enter question: ");
+                    String question = scanner.nextLine();
+
+                    List<String> options = new ArrayList<>();
+                    for (int i = 0; i < 4; i++) {
+                        System.out.print("Option " + (i + 1) + ": ");
+                        options.add(scanner.nextLine());
+                    }
+
+                    System.out.print("Correct option (1-4): ");
+                    int correct = Integer.parseInt(scanner.nextLine()) - 1;
+
+                    quiz.add(new QuizQuestion(question, options, correct));
+                    org.ScubMembership.Quiz.QuizManager.saveQuiz(selectedSportName, quiz);
+
+                    System.out.println("✅ Question added to quiz for " + selectedSportName);
+                    break;
+
                 default:
                     System.out.println("Invalid option.");
             }
