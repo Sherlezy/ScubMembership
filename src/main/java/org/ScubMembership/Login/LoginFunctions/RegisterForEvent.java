@@ -3,6 +3,7 @@ package org.ScubMembership.Login.LoginFunctions;
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.SportActivity.EventManager;
 import org.ScubMembership.SportActivity.SportEvent;
+import org.ScubMembership.RecommendationLogic.SportUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,6 +13,8 @@ public class RegisterForEvent {
 
     public static void execute(LoginPage loginPage) {
         Scanner scanner = loginPage.getScanner();
+        String favoriteSport = loginPage.getCurrentUser().getPreferredSport();
+
         List<SportEvent> events = EventManager.getEvents();
         List<SportEvent> upcomingEvents = events.stream()
                 .filter(event -> event.getDateTime().isAfter(LocalDateTime.now()))
@@ -22,21 +25,27 @@ public class RegisterForEvent {
             return;
         }
 
+
+        List<SportEvent> sortedEvents = SportUtils.sortEventsByFavoriteSportFirst(upcomingEvents, loginPage.getCurrentUser());
+
         System.out.println("\n📅 Upcoming Events:");
-        for (int i = 0; i < upcomingEvents.size(); i++) {
-            System.out.println((i + 1) + ". " + upcomingEvents.get(i));
+        for (int i = 0; i < sortedEvents.size(); i++) {
+            SportEvent event = sortedEvents.get(i);
+            boolean isFavorite = event.getSport().getName().equalsIgnoreCase(favoriteSport);
+            String badge = isFavorite ? "🏅 " : "";
+            System.out.println((i + 1) + ". " + badge + event);
         }
 
         System.out.print("Select the event you want to register for by number: ");
         try {
             int eventIndex = Integer.parseInt(scanner.nextLine()) - 1;
 
-            if (eventIndex < 0 || eventIndex >= upcomingEvents.size()) {
+            if (eventIndex < 0 || eventIndex >= sortedEvents.size()) {
                 System.out.println("❌ Invalid input.");
                 return;
             }
 
-            SportEvent selectedEvent = upcomingEvents.get(eventIndex);
+            SportEvent selectedEvent = sortedEvents.get(eventIndex);
             String username = loginPage.getCurrentUser().getUsername();
 
             if (selectedEvent.getRegisteredUsers().contains(username)) {
