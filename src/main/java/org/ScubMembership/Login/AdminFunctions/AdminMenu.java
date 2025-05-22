@@ -49,45 +49,39 @@ public class AdminMenu {
             System.out.println("6. Add quiz question");
             System.out.println("7. Show every normal user");
             System.out.println("8. Modify a user's information");
-
+            System.out.println("9. View average feedback for the past events");
 
             System.out.print("Option: ");
             String option = scanner.nextLine();
 
             switch (option) {
-
                 case "1":
                     ShowAllAdmins.execute();
                     break;
-
                 case "2":
                     RegisterNewAdmin.execute(scanner);
                     break;
-
                 case "3":
                     running = false;
                     break;
                 case "4":
                     CreateNewSport.execute(scanner, sports);
                     break;
-
-
                 case "5":
                     CreateNewSportEvent.execute(sports);
                     break;
-
-                
                 case "6":
                     AddNewQuizQuestion.execute(scanner);
                     break;
-
                 case "7":
                     ShowAllNormalUsers.execute();
                     break;
                 case "8":
                     ModifyUsersInformations.execute(scanner);
                     break;
-
+                case "9":
+                    ViewFeedbackAverage.execute();
+                    break;
                 default:
                     System.out.println("Invalid option.");
             }
