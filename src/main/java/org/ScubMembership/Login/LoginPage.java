@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class LoginPage {
     protected final HashMap<String, NormalUser> loginInfo;
-    protected final Scanner scanner;
+    private Scanner scanner;
     protected boolean loggedIn;
     protected NormalUser currentUser;
 
@@ -38,6 +38,10 @@ public class LoginPage {
     }
     public void setCurrentUser(NormalUser currentUser){
         this.currentUser = currentUser;
+    }
+
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
     }
 
 }
