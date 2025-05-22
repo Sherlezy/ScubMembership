@@ -2,8 +2,10 @@ package org.ScubMembership.Registration;
 
 import org.ScubMembership.Login.LoginFunctions.LoginMenu;
 import org.ScubMembership.Login.LoginPage;
+import org.ScubMembership.PasswordSecurity.PasswordValidator;
 import org.ScubMembership.Users.NormalUser.NormalUser;
 import org.ScubMembership.Utils.EmailValidator;
+import org.ScubMembership.Utils.PasswordEncryptor;
 import org.ScubMembership.Utils.UserStorage;
 
 import java.util.LinkedList;
@@ -60,6 +62,15 @@ public class RegistrationProcess {
 
             System.out.print("Enter password: ");
             String password = scanner.nextLine();
+
+            while (!PasswordValidator.isStrongPassword(password)) {
+                System.out.println("❌ Password must be at least 8 characters long, contain uppercase, lowercase, number, and symbol.");
+                System.out.print("Enter password: ");
+                password = scanner.nextLine();
+            }
+
+            String hashedPassword = PasswordEncryptor.hashPassword(password);
+
 
             //Qua raga ho messo l'ID che aumenta in base al numero di utenti registrati.
             int ID = loginPage.getLoginInfo().size() + 1;
