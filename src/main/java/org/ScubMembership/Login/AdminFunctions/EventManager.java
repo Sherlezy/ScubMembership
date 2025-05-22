@@ -37,7 +37,7 @@ public class EventManager {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
             dateTime = LocalDateTime.parse(dateTimeStr, formatter);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("❌ Invalid date format");
             return;
         }
