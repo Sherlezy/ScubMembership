@@ -5,7 +5,7 @@ import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.PasswordSecurity.PasswordValidator;
 import org.ScubMembership.Users.NormalUser.NormalUser;
 import org.ScubMembership.Utils.EmailValidator;
-import org.ScubMembership.Utils.PasswordEncryptor;
+import org.ScubMembership.PasswordSecurity.PasswordEncryptor;
 import org.ScubMembership.Utils.UserStorage;
 
 import java.util.LinkedList;

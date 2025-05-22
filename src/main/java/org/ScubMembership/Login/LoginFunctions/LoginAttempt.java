@@ -2,7 +2,7 @@ package org.ScubMembership.Login.LoginFunctions;
 
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.Users.NormalUser.NormalUser;
-import org.ScubMembership.Utils.PasswordEncryptor;
+import org.ScubMembership.PasswordSecurity.PasswordEncryptor;
 
 import java.util.HashMap;
 import java.util.Scanner;

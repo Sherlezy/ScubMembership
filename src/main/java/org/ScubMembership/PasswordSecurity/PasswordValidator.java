@@ -7,6 +7,7 @@ public class PasswordValidator {
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$";
 
     public static boolean isStrongPassword(String password) {
-        return Pattern.matches(STRONG_PASSWORD_REGEX, password);
+        return password != null && Pattern.matches(STRONG_PASSWORD_REGEX, password);
     }
+
 }
