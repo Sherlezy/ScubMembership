@@ -40,6 +40,11 @@ public class EventManager {
             return;
         }
 
+        if(dateTime.isBefore(LocalDateTime.now())) {
+            System.out.println("❌ Cannot create an event in the past. Please enter a future date.");
+            return;
+        }
+
         System.out.println("Enter maximum number of participants: ");
         int maxParticipants = Integer.parseInt(scanner.nextLine());
 

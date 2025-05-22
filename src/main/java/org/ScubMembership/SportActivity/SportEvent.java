@@ -9,6 +9,7 @@ public class SportEvent {
     private LocalDateTime dateTime;
     private int maxParticipants;
     private List<String> registeredUsers = new ArrayList<>();
+    private List<Feedback> feedbackList = new ArrayList<>();
 
     public SportEvent(abs_sport sport, LocalDateTime dateTime, int maxParticipants) {
         this.sport = sport;
@@ -38,6 +39,24 @@ public class SportEvent {
 
     public int getMaxParticipants() {
         return maxParticipants;
+    }
+
+    public void addFeedback(Feedback feedback) {
+        feedbackList.add(feedback);
+    }
+
+    public List<Feedback> getFeedbackList() {
+        return feedbackList;
+    }
+
+    public void showFeedback() {
+        if(feedbackList.isEmpty()) {
+            System.out.println("No feedback yet.");
+        } else {
+            for(Feedback feedback : feedbackList) {
+                System.out.println(feedback);
+            }
+        }
     }
 
     @Override

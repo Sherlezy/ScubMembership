@@ -124,6 +124,10 @@ public class LoginMenu {
                         System.out.println("❌ Invalid input.");
                     }
                     break;
+                case "9":
+                    events = EventManager.getEvents();
+                    String currentUser = loginPage.getCurrentUser().getUsername();
+                    break;
                 default:
                     System.out.println("❌ Invalid option. Please try again.");
             }
