@@ -4,6 +4,7 @@ import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.SportActivity.EventManager;
 import org.ScubMembership.SportActivity.SportEvent;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,27 +13,30 @@ public class RegisterForEvent {
     public static void execute(LoginPage loginPage) {
         Scanner scanner = loginPage.getScanner();
         List<SportEvent> events = EventManager.getEvents();
+        List<SportEvent> upcomingEvents = events.stream()
+                .filter(event -> event.getDateTime().isAfter(LocalDateTime.now()))
+                .toList();
 
-        if (events.isEmpty()) {
-            System.out.println("❌ No events available.");
+        if (upcomingEvents.isEmpty()) {
+            System.out.println("❌ No upcoming events available for registration.");
             return;
         }
 
-        System.out.println("\n📅 Available Events:");
-        for (int i = 0; i < events.size(); i++) {
-            System.out.println((i + 1) + ". " + events.get(i));
+        System.out.println("\n📅 Upcoming Events:");
+        for (int i = 0; i < upcomingEvents.size(); i++) {
+            System.out.println((i + 1) + ". " + upcomingEvents.get(i));
         }
 
         System.out.print("Select the event you want to register for by number: ");
         try {
             int eventIndex = Integer.parseInt(scanner.nextLine()) - 1;
 
-            if (eventIndex < 0 || eventIndex >= events.size()) {
+            if (eventIndex < 0 || eventIndex >= upcomingEvents.size()) {
                 System.out.println("❌ Invalid input.");
                 return;
             }
 
-            SportEvent selectedEvent = events.get(eventIndex);
+            SportEvent selectedEvent = upcomingEvents.get(eventIndex);
             String username = loginPage.getCurrentUser().getUsername();
 
             if (selectedEvent.getRegisteredUsers().contains(username)) {

@@ -2,10 +2,10 @@ package org.ScubMembership.SportActivity;
 
 public class Feedback {
     private String username;
-    private float rating;
+    private double rating;
     private String comment;
 
-    public Feedback(String username, float rating, String comment) {
+    public Feedback(String username, double rating, String comment) {
         this.username = username;
         this.rating = rating;
         this.comment = comment;
@@ -15,7 +15,7 @@ public class Feedback {
         return username;
     }
 
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
