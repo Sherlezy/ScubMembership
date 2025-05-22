@@ -3,19 +3,22 @@ package org.ScubMembership.Login.LoginFunctions;
 import org.ScubMembership.Login.AdminFunctions.EventManager;
 import org.ScubMembership.Login.AdminFunctions.SportEvent;
 import org.ScubMembership.Login.LoginPage;
+import org.ScubMembership.QuizzSystem.LeaderboardDisplay;
+import org.ScubMembership.QuizzSystem.QuizMenu;
+import org.ScubMembership.QuizzSystem.QuizRunner;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class LoginMenu {
 
-    private LoginPage loginPage;
+    private final LoginPage loginPage;
 
-    public LoginMenu (LoginPage loginPage){
+    public LoginMenu(LoginPage loginPage) {
         this.loginPage = loginPage;
     }
 
-    public void showLoginMenu(){
+    public void showLoginMenu() {
         Scanner scanner = loginPage.getScanner();
 
         boolean running = true;
@@ -27,27 +30,40 @@ public class LoginMenu {
             System.out.println("2. View User Details");
             System.out.println("3. Logout");
             System.out.println("4. Join General Chat");
-            System.out.println("5. Register for an event");
+            System.out.println("5. Take your Favourite Sport Quiz");
+            System.out.println("6. Take a Quiz for Another Sport");
+            System.out.println("7. View a Sport's Leaderboard");
+            System.out.println("8. Register for an event");
             System.out.print("Option: ");
-
             String option = scanner.nextLine();
 
             switch (option) {
                 case "1":
-                    ChangePassword changePassword = new ChangePassword(loginPage);
-                    changePassword.startChangePassword();
+                    new ChangePassword(loginPage).startChangePassword();
                     break;
                 case "2":
-                    ViewUserDetails userDetails = new ViewUserDetails(loginPage);
-                    userDetails.seeUserDetails();
+                    new ViewUserDetails(loginPage).seeUserDetails();
                     break;
                 case "3":
-                    Logout logout = new Logout(loginPage);
-                    logout.startLogout();
+                    new Logout(loginPage).startLogout();
                     running = false;
                     break;
                 case "4":
-                    org.ScubMembership.ChatSystem.ChatClient.startChat(loginPage.getCurrentUser().getUsername());
+                    org.ScubMembership.ChatSystem.ChatClient.startChat(
+                            loginPage.getCurrentUser().getUsername()
+                    );
+                    break;
+                case "8":
+                    String favSport = loginPage.getCurrentUser().getPreferredSport();
+                    QuizRunner.startQuiz(favSport, scanner, loginPage.getCurrentUser());
+                    break;
+                case "6":
+                    QuizMenu.show(loginPage.getCurrentUser(), scanner);
+                    break;
+                case "7":
+                    System.out.print("Enter sport to view leaderboard: ");
+                    String sport = scanner.nextLine().trim();
+                    LeaderboardDisplay.showLeaderboardForSport(sport);
                     break;
                 case "5":
                     List<SportEvent> events = EventManager.getEvents();
@@ -88,14 +104,12 @@ public class LoginMenu {
                     }
                     break;
                 default:
-                    System.out.println("Invalid option. Please try again.");
+                    System.out.println("❌ Invalid option. Please try again.");
             }
         }
 
         if (!loginPage.isLoggedIn()) {
-            StartLoginProcess loginProcess = new StartLoginProcess(loginPage);
-            loginProcess.startLoginProcess();
+            new StartLoginProcess(loginPage).startLoginProcess();
         }
     }
-
 }
