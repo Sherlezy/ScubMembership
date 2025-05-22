@@ -64,7 +64,8 @@ public class SportEvent implements Serializable {
 
     public double getAverageRating() {
         if(feedbackList.isEmpty()) return 0.0;
-        return feedbackList.stream().mapToDouble(Feedback::getRating).average().orElse(0.0);
+        double average = feedbackList.stream().mapToDouble(Feedback::getRating).average().orElse(0.0);
+        return Math.round(average * 10.0) / 10.0;
     }
 
     @Override
