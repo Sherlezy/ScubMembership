@@ -1,4 +1,4 @@
-package org.ScubMembership.Quiz;
+package org.ScubMembership.QuizzSystem;
 
 import org.ScubMembership.QuizzSystem.QuizQuestion;
 

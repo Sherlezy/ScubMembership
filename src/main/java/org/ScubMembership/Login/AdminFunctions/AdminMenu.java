@@ -46,6 +46,9 @@ public class AdminMenu {
             System.out.println("4. Add new sport");
             System.out.println("5. Create a sport event");
             System.out.println("6. Add quiz question");
+            System.out.println("7. Show every normal user");
+            System.out.println("8. Modify a user's information");
+
 
             System.out.print("Option: ");
             String option = scanner.nextLine();
@@ -142,7 +145,7 @@ public class AdminMenu {
                         }
                     }
 
-                    List<QuizQuestion> quiz = org.ScubMembership.Quiz.QuizManager.loadQuiz(selectedSportName);
+                    List<QuizQuestion> quiz = org.ScubMembership.QuizzSystem.QuizManager.loadQuiz(selectedSportName);
 
                     System.out.print("Enter question: ");
                     String question = scanner.nextLine();
@@ -157,9 +160,15 @@ public class AdminMenu {
                     int correct = Integer.parseInt(scanner.nextLine()) - 1;
 
                     quiz.add(new QuizQuestion(question, options, correct));
-                    org.ScubMembership.Quiz.QuizManager.saveQuiz(selectedSportName, quiz);
+                    org.ScubMembership.QuizzSystem.QuizManager.saveQuiz(selectedSportName, quiz);
 
                     System.out.println("✅ Question added to quiz for " + selectedSportName);
+                    break;
+                case "7":
+                    ShowAllNormalUsers.execute();
+                    break;
+                case "8":
+                    ModifyUsersInformations.execute(scanner);
                     break;
 
                 default:
