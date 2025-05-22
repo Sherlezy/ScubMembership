@@ -1,10 +1,13 @@
 package org.ScubMembership.SportActivity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SportEvent {
+public class SportEvent implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private abs_sport sport;
     private LocalDateTime dateTime;
     private int maxParticipants;
@@ -17,7 +20,7 @@ public class SportEvent {
     }
 
     public boolean registerUser(String username) {
-        if(registeredUsers.size() >= maxParticipants || registeredUsers.contains(username)) {
+        if (registeredUsers.size() >= maxParticipants || registeredUsers.contains(username)) {
             return false;
         }
         registeredUsers.add(username);
