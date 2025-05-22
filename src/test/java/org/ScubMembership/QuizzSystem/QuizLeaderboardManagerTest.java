@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class QuizLeaderboardManagerTest {
 
-    private static final String TEST_FILE = "quiz_leaderboard.ser";
+    private static final String TEST_FILE = "Storage/quiz_leaderboard.ser";
 
     @BeforeEach
     void setup() throws Exception {

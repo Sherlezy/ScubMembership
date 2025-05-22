@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class QuizProgressTracker {
-    private static final String FILE_PATH = "quiz_progress.ser";
+    private static final String FILE_PATH = "Storage/quiz_progress.ser";
 
     // username → (sport → questionsAnsweredCount)
     private static Map<String, Map<String, Integer>> progress = loadProgress();

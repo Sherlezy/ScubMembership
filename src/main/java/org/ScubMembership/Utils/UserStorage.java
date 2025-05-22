@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class UserStorage {
-    private static String filePath = "users.ser";
+    private static String filePath = "Storage/users.ser";
 
     public static void setFilePath(String newPath) {
         filePath = newPath;

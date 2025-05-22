@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class EventManager {
-    private static final String FILE_PATH = "events.ser";
+    private static final String FILE_PATH = "Storage/events.ser";
     private static final List<SportEvent> events = loadEvents();
 
     public static void createEvent(List<abs_sport> availableSports) {
