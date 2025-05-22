@@ -1,6 +1,10 @@
 package org.ScubMembership.SportActivity;
 
-public abstract class abs_sport implements Sport{
+import java.io.Serializable;
+
+public abstract class abs_sport implements Sport, Serializable {
+    private static final long serialVersionUID = 1L;
+
     protected String name;
     protected String[] equipment;
     protected String gymName;
@@ -58,18 +62,18 @@ public abstract class abs_sport implements Sport{
     @Override
     public void displayInfo() {
         System.out.println("Name: " + name);
-        System.out.println("The sport is praticated ");
-        if(indoorSport) {
+        System.out.println("The sport is practiced ");
+        if (indoorSport) {
             System.out.print("in the gym: " + gymName);
         } else {
             System.out.print("outside");
         }
         System.out.println("Number of players: " + numberOfPlayers);
         System.out.println("Equipment: ");
-        for(String item : equipment) {
+        for (String item : equipment) {
             System.out.print(item + " ");
         }
-        System.out.println("Rules: " + rules);
+        System.out.println("\nRules: " + rules);
         System.out.println("Person in charge: " + personInCharge);
         System.out.println();
     }
