@@ -1,6 +1,7 @@
 package org.ScubMembership.Utils;
 
 import org.ScubMembership.Login.AdminFunctions.AdminMenu;
+import org.ScubMembership.Login.LoginFunctions.LoginMenu;
 import org.ScubMembership.Login.LoginFunctions.StartLoginProcess;
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.Registration.RegistrationProcess;
@@ -36,14 +37,21 @@ public class Welcome {
                     if (adminInfo.containsKey(username) && adminInfo.get(username).getPassword().equals(password)) {
                         System.out.println("👑 Admin login successful!");
                         Admin admin = adminInfo.get(username);
-                        AdminMenu.show(admin); // Make sure you implement this class
+                        AdminMenu.show(admin);
+                        running = false;
+                    } else if (loginInfo.containsKey(username) && loginInfo.get(username).getPassword().equals(password)) {
+                        System.out.println("✅ User login successful!");
+                        NormalUser user = loginInfo.get(username);
+                        loginPage.setCurrentUser(user);
+                        loginPage.setLoggedIn(true);
+                        LoginMenu userMenu = new LoginMenu(loginPage);
+                        userMenu.showLoginMenu();
                         running = false;
                     } else {
-                        StartLoginProcess loginProcess = new StartLoginProcess(loginPage);
-                        loginProcess.startLoginProcess();
-                        running = false;
+                        System.out.println("❌ Invalid credentials.");
                     }
                     break;
+
 
                 default:
                     System.out.println("Please select 1 or 2");
