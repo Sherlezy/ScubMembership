@@ -62,7 +62,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testSuccessfulRegistration() {
-        String input = "test@example.com\ntestuser\ntestpass\nSoccer\n2";
+        String input = "test@example.com\ntestuser\ntestpass\nClimbing\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 //        Queste tre righe simulano l'input dell'utente e lo passa al ByteArrayInputStream che lo trasforma in un flusso che lo scanner può leggere:
@@ -91,7 +91,7 @@ public class RegistrationProcessTest {
         assertEquals("testuser", registeredUser.getUsername());
         assertEquals("testpass", registeredUser.getPassword());
         assertEquals(1, registeredUser.getID());
-        assertEquals("Soccer", registeredUser.getPreferredSport());
+        assertEquals("Climbing", registeredUser.getPreferredSport());
 
         assertEquals(1, registrationProcess.getRegisteredUsers().size());
 
@@ -105,7 +105,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithInvalidEmailThenValid(){
-        String input = "invalid-email\nvalid@example.com\ntestuser\ntestpass\nSoccer\n2";
+        String input = "invalid-email\nvalid@example.com\ntestuser\ntestpass\nSoccer\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -132,7 +132,7 @@ public class RegistrationProcessTest {
         NormalUser existingUser = new NormalUser("existing@example.com", "existinguser", "pass", 1, "Soccer");
         loginInfo.put("existinguser", existingUser);
 
-        String input = "existing@example.com\nnew@example.com\nnewuser\nnewpass\nBasketball\n2";
+        String input = "existing@example.com\nnew@example.com\nnewuser\nnewpass\nBasketball\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -181,7 +181,7 @@ public class RegistrationProcessTest {
         NormalUser existingUser = new NormalUser("EXISTING@EXAMPLE.COM", "existinguser", "pass", 1, "Basketball");
         loginInfo.put("existinguser", existingUser);
 
-        String input = "existing@example.com\nnew@example.com\nnewuser\nnewpass\nSoccer\n2";
+        String input = "existing@example.com\nnew@example.com\nnewuser\nnewpass\nSoccer\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -202,7 +202,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithEmptyInputHandling() {
-        String input = "   valid@example.com   \n   testuser   \ntestpass\nSport\n2";
+        String input = "   valid@example.com   \n   testuser   \ntestpass\nSport\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -228,7 +228,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testMultipleInvalidEmailsBeforeValid() {
-        String input = "bad1\nbad2\nbad3\ngood@example.com\ntester\npass123\nHockey\n2";
+        String input = "bad1\nbad2\nbad3\ngood@example.com\ntester\npass123\nHockey\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -258,7 +258,7 @@ public class RegistrationProcessTest {
         loginInfo.put("taken1", new NormalUser("email1@example.com", "taken1", "pass", 1, "Sport"));
         loginInfo.put("taken2", new NormalUser("email2@example.com", "taken2", "pass", 2, "Sport"));
 
-        String input = "new@example.com\ntaken1\ntaken2\navailable\npassword\nGolf\n2";
+        String input = "new@example.com\ntaken1\ntaken2\navailable\npassword\nFootball\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
