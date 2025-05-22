@@ -62,6 +62,11 @@ public class SportEvent implements Serializable {
         }
     }
 
+    public double getAverageRating() {
+        if(feedbackList.isEmpty()) return 0.0;
+        return feedbackList.stream().mapToDouble(Feedback::getRating).average().orElse(0.0);
+    }
+
     @Override
     public String toString() {
         return "Event for " + sport.getName() + " on " + dateTime + " (Max " + maxParticipants + ", Registered: " +
