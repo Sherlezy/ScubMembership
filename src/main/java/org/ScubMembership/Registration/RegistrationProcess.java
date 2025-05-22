@@ -9,6 +9,7 @@ import org.ScubMembership.Utils.UserStorage;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import static org.ScubMembership.SportActivity.SportRegistry.SPORTS;
 
 
 
@@ -63,8 +64,31 @@ public class RegistrationProcess {
             //Qua raga ho messo l'ID che aumenta in base al numero di utenti registrati.
             int ID = loginPage.getLoginInfo().size() + 1;
 
-            System.out.print("Enter your preferred sport: ");
-            String preferredSport = scanner.nextLine();
+            String preferredSport = null;
+
+            while (true) {
+                System.out.println("Choose your preferred sport:");
+                for (int i = 0; i < SPORTS.size(); i++) {
+                    System.out.println((i + 1) + ". " + SPORTS.get(i).getName());
+                }
+
+                System.out.print("Option (1-" + SPORTS.size() + "): ");
+                String input = scanner.nextLine();
+
+                try {
+                    int selected = Integer.parseInt(input);
+                    if (selected >= 1 && selected <= SPORTS.size()) {
+                        preferredSport = SPORTS.get(selected - 1).getName();
+                        break;
+                    } else {
+                        System.out.println("❌ Invalid number. Please try again.");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("❌ Invalid input. Please enter a number.");
+                }
+            }
+
+
 
             NormalUser newUser = new NormalUser(email, username, password, ID, preferredSport);
             registeredUsers.add(newUser);
