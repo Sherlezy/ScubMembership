@@ -1,6 +1,5 @@
-package org.ScubMembership.Login.AdminFunctions;
+package org.ScubMembership.SportActivity;
 
-import org.ScubMembership.SportActivity.abs_sport;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public class SportEvent {
     }
 
     public boolean registerUser(String username) {
-        if(registeredUsers.size() >= maxParticipants) {
+        if(registeredUsers.size() >= maxParticipants || registeredUsers.contains(username)) {
             return false;
         }
         registeredUsers.add(username);
