@@ -23,8 +23,8 @@ public class ViewFeedbackAveragesTest {
     @Test
     void testAverageShownForPastEvent() {
         abs_sport climbing = new Climbing();
-        NormalUser user1 = new NormalUser("u1@unibz.it", "user1", "pass", 11, "Climbing");
-        NormalUser user2 = new NormalUser("u2@unibz.it", "user2", "pass", 12, "Swimming");
+        NormalUser user1 = new NormalUser("u1@unibz.it", "user1", "pass", 11, "Climbing", "Evening (17:00 - 21:00)");
+        NormalUser user2 = new NormalUser("u2@unibz.it", "user2", "pass", 12, "Swimming", "Afternoon (17:00 - 21:00)");
         SportEvent pastEvent = new SportEvent(climbing, LocalDateTime.now().minusDays(2), 4);
 
         pastEvent.registerUser(user1.getUsername());
