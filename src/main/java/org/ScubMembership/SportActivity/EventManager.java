@@ -1,5 +1,7 @@
 package org.ScubMembership.SportActivity;
 
+import org.ScubMembership.RecommendationLogic.TimeSlotSuggester;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,6 +36,9 @@ public class EventManager {
         }
 
         abs_sport selectedSport = availableSports.get(sportIndex);
+
+        System.out.println(TimeSlotSuggester.suggestBestTimeSlot(selectedSport.getName()));
+
 
         System.out.print("Enter date and time (dd-MM-yyyy HH:mm): ");
         String dateTimeStr = scanner.nextLine();
