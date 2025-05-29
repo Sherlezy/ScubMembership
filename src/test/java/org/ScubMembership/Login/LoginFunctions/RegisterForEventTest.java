@@ -22,7 +22,7 @@ public class RegisterForEventTest {
 
     @BeforeEach
     void setup() {
-        mockUser = new NormalUser("u@unibz.it", "testUser", "pass", 1, "Running");
+        mockUser = new NormalUser("u@unibz.it", "testUser", "pass", 1, "Running", "Evening (17:00 - 21:00)");
         loginPage = new LoginPage(new HashMap<>());
         loginPage.setCurrentUser(mockUser);
 

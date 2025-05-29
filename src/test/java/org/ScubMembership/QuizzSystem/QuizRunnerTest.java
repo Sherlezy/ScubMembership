@@ -15,7 +15,7 @@ public class QuizRunnerTest {
 
     @BeforeEach
     public void setup() {
-        user = new NormalUser("test@example.com", "testUser", "password", 1, "Football");
+        user = new NormalUser("test@example.com", "testUser", "password", 1, "Football", "Evening (17:00 - 21:00)");
 
         // Prepare test quiz
         List<QuizQuestion> sampleQuiz = List.of(
