@@ -99,9 +99,34 @@ public class RegistrationProcess {
                 }
             }
 
+            String preferredTimeSlot = null;
+            System.out.println("\nChoose your preferred time slot:");
+            System.out.println("1. Morning (08:00 - 12:00)");
+            System.out.println("2. Afternoon (12:00 - 17:00)");
+            System.out.println("3. Evening (17:00 - 21:00)");
 
+            while (true) {
+                System.out.print("Option (1-3): ");
+                String slotInput = scanner.nextLine();
+                switch (slotInput) {
+                    case "1":
+                        preferredTimeSlot = "Morning (08:00 - 12:00)";
+                        break;
+                    case "2":
+                        preferredTimeSlot = "Afternoon (12:00 - 17:00)";
+                        break;
+                    case "3":
+                        preferredTimeSlot = "Evening (17:00 - 21:00)";
+                        break;
+                    default:
+                        System.out.println("❌ Invalid input. Please choose 1, 2, or 3.");
+                        continue;
+                }
+                break;
+            }
 
-            NormalUser newUser = new NormalUser(email, username, password, ID, preferredSport);
+            // 7. Create and register user
+            NormalUser newUser = new NormalUser(email, username, hashedPassword, ID, preferredSport, preferredTimeSlot);
             registeredUsers.add(newUser);
 
             loginPage.getLoginInfo().put(username, newUser);
