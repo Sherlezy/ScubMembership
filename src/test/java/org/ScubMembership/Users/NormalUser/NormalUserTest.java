@@ -3,6 +3,7 @@ package org.ScubMembership.Users.NormalUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.mockito.internal.matchers.Null;
 
 import java.io.Serializable;
 
@@ -16,10 +17,11 @@ class NormalUserTest {
     private final String TEST_PASSWORD = "userpass123";
     private final int TEST_ID = 1;
     private final String TEST_PREFERRED_SPORT = "Basketball";
+    private final String TEST_PREFERRED_TIME_SLOT = "Morning (08:00 - 12:00)";
 
     @BeforeEach
     void setUp() {
-        normalUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_ID, TEST_PREFERRED_SPORT);
+        normalUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_ID, TEST_PREFERRED_SPORT, TEST_PREFERRED_TIME_SLOT);
     }
 
     @Test
@@ -40,82 +42,102 @@ class NormalUserTest {
         String password = "differentpass";
         int id = 999;
         String sport = "Football";
+        String time = "Afternoon (12:00 - 17:00)";
 
-        NormalUser newUser = new NormalUser(email, username, password, id, sport);
+        NormalUser newUser = new NormalUser(email, username, password, id, sport, sport);
 
         assertEquals(email, newUser.getEmail());
         assertEquals(username, newUser.getUsername());
         assertEquals(password, newUser.getPassword());
         assertEquals(id, newUser.getID());
         assertEquals(sport, newUser.getPreferredSport());
+        assertEquals(time, newUser.getPreferredTimeSlot());
     }
 
     @Test
     @DisplayName("Constructor should handle null email")
     void testConstructorWithNullEmail() {
-        NormalUser nullEmailUser = new NormalUser(null, TEST_USERNAME, TEST_PASSWORD, TEST_ID, TEST_PREFERRED_SPORT);
+        NormalUser nullEmailUser = new NormalUser(null, TEST_USERNAME, TEST_PASSWORD, TEST_ID, TEST_PREFERRED_SPORT, TEST_PREFERRED_TIME_SLOT);
 
         assertNull(nullEmailUser.getEmail());
         assertEquals(TEST_USERNAME, nullEmailUser.getUsername());
         assertEquals(TEST_PASSWORD, nullEmailUser.getPassword());
         assertEquals(TEST_ID, nullEmailUser.getID());
         assertEquals(TEST_PREFERRED_SPORT, nullEmailUser.getPreferredSport());
+        assertEquals(TEST_PREFERRED_TIME_SLOT, nullEmailUser.getPreferredTimeSlot());
     }
 
     @Test
     @DisplayName("Constructor should handle null username")
     void testConstructorWithNullUsername() {
-        NormalUser nullUsernameUser = new NormalUser(TEST_EMAIL, null, TEST_PASSWORD, TEST_ID, TEST_PREFERRED_SPORT);
+        NormalUser nullUsernameUser = new NormalUser(TEST_EMAIL, null, TEST_PASSWORD, TEST_ID, TEST_PREFERRED_SPORT, TEST_PREFERRED_TIME_SLOT);
 
         assertEquals(TEST_EMAIL, nullUsernameUser.getEmail());
         assertNull(nullUsernameUser.getUsername());
         assertEquals(TEST_PASSWORD, nullUsernameUser.getPassword());
         assertEquals(TEST_ID, nullUsernameUser.getID());
         assertEquals(TEST_PREFERRED_SPORT, nullUsernameUser.getPreferredSport());
+        assertEquals(TEST_PREFERRED_TIME_SLOT, nullUsernameUser.getPreferredTimeSlot());
     }
 
     @Test
     @DisplayName("Constructor should handle null password")
     void testConstructorWithNullPassword() {
-        NormalUser nullPasswordUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, null, TEST_ID, TEST_PREFERRED_SPORT);
+        NormalUser nullPasswordUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, null,  TEST_ID, TEST_PREFERRED_SPORT, TEST_PREFERRED_SPORT);
 
         assertEquals(TEST_EMAIL, nullPasswordUser.getEmail());
         assertEquals(TEST_USERNAME, nullPasswordUser.getUsername());
         assertNull(nullPasswordUser.getPassword());
         assertEquals(TEST_ID, nullPasswordUser.getID());
         assertEquals(TEST_PREFERRED_SPORT, nullPasswordUser.getPreferredSport());
+        assertEquals(TEST_PREFERRED_SPORT, nullPasswordUser.getPreferredTimeSlot());
     }
 
     @Test
     @DisplayName("Constructor should handle null preferred sport")
     void testConstructorWithNullPreferredSport() {
-        NormalUser nullSportUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_ID, null);
+        NormalUser nullSportUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_ID, null, TEST_PREFERRED_TIME_SLOT);
 
         assertEquals(TEST_EMAIL, nullSportUser.getEmail());
         assertEquals(TEST_USERNAME, nullSportUser.getUsername());
         assertEquals(TEST_PASSWORD, nullSportUser.getPassword());
         assertEquals(TEST_ID, nullSportUser.getID());
         assertNull(nullSportUser.getPreferredSport());
+        assertEquals(TEST_PREFERRED_TIME_SLOT, nullSportUser.getPreferredTimeSlot());
+    }
+
+    @Test
+    @DisplayName("Constructor should handle null preferred sport")
+    void testConstructorWithNullPreferredTimeSlot() {
+        NormalUser nullSportUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, TEST_ID, TEST_PREFERRED_SPORT, null);
+
+        assertEquals(TEST_EMAIL, nullSportUser.getEmail());
+        assertEquals(TEST_USERNAME, nullSportUser.getUsername());
+        assertEquals(TEST_PASSWORD, nullSportUser.getPassword());
+        assertEquals(TEST_ID, nullSportUser.getID());
+        assertEquals(TEST_PREFERRED_SPORT, nullSportUser.getPreferredSport());
+        assertNull(nullSportUser.getPreferredTimeSlot());
     }
 
     @Test
     @DisplayName("Constructor should handle negative ID")
     void testConstructorWithNegativeID() {
         int negativeId = -1;
-        NormalUser negativeIdUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, negativeId, TEST_PREFERRED_SPORT);
+        NormalUser negativeIdUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, negativeId, TEST_PREFERRED_SPORT, TEST_PREFERRED_TIME_SLOT);
 
         assertEquals(TEST_EMAIL, negativeIdUser.getEmail());
         assertEquals(TEST_USERNAME, negativeIdUser.getUsername());
         assertEquals(TEST_PASSWORD, negativeIdUser.getPassword());
         assertEquals(negativeId, negativeIdUser.getID());
         assertEquals(TEST_PREFERRED_SPORT, negativeIdUser.getPreferredSport());
+        assertEquals(TEST_PREFERRED_TIME_SLOT, negativeIdUser.getPreferredTimeSlot());
     }
 
     @Test
     @DisplayName("Constructor should handle zero ID")
     void testConstructorWithZeroID() {
         int zeroId = 0;
-        NormalUser zeroIdUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, zeroId, TEST_PREFERRED_SPORT);
+        NormalUser zeroIdUser = new NormalUser(TEST_EMAIL, TEST_USERNAME, TEST_PASSWORD, zeroId, TEST_PREFERRED_SPORT, TEST_PREFERRED_TIME_SLOT);
 
         assertEquals(zeroId, zeroIdUser.getID());
     }
