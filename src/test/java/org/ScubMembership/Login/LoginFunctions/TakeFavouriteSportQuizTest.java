@@ -19,7 +19,7 @@ public class TakeFavouriteSportQuizTest {
 
     @BeforeEach
     void setup() {
-        mockUser = new NormalUser("u@unibz.it", "testUser", "pass", 1, "Volleyball");
+        mockUser = new NormalUser("u@unibz.it", "testUser", "pass", 1, "Volleyball", "testTime");
 
         loginPage = new LoginPage(new HashMap<>());
         loginPage.setCurrentUser(mockUser);
