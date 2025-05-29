@@ -4,6 +4,7 @@ import org.ScubMembership.Login.AdminFunctions.AdminMenu;
 import org.ScubMembership.Login.LoginFunctions.LoginMenu;
 import org.ScubMembership.Login.LoginFunctions.StartLoginProcess;
 import org.ScubMembership.Login.LoginPage;
+import org.ScubMembership.PasswordSecurity.PasswordEncryptor;
 import org.ScubMembership.Registration.RegistrationProcess;
 import org.ScubMembership.Users.Admin.Admin;
 import org.ScubMembership.Users.NormalUser.NormalUser;
@@ -33,13 +34,14 @@ public class Welcome {
                     String username = sc.nextLine();
                     System.out.print("Enter password: ");
                     String password = sc.nextLine();
+                    String hashedInputPassword = PasswordEncryptor.hashPassword(password);
 
                     if (adminInfo.containsKey(username) && adminInfo.get(username).getPassword().equals(password)) {
                         System.out.println("👑 Admin login successful!");
                         Admin admin = adminInfo.get(username);
                         AdminMenu.show(admin);
                         running = false;
-                    } else if (loginInfo.containsKey(username) && loginInfo.get(username).getPassword().equals(password)) {
+                    } else if (loginInfo.containsKey(username) && loginInfo.get(username).getPassword().equals(hashedInputPassword)) {
                         System.out.println("✅ User login successful!");
                         NormalUser user = loginInfo.get(username);
                         loginPage.setCurrentUser(user);
@@ -51,6 +53,7 @@ public class Welcome {
                         System.out.println("❌ Invalid credentials.");
                     }
                     break;
+
 
 
                 default:
