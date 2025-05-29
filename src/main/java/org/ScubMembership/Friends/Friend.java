@@ -1,2 +1,5 @@
-package org.ScubMembership.Friends;public class Firend {
+package org.ScubMembership.Friends;
+
+public class Friend {
+
 }
