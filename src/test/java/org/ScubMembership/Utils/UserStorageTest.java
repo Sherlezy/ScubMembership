@@ -27,8 +27,8 @@ public class UserStorageTest {
 
     @Test
     void testSaveAndLoadUsers() {
-        NormalUser user1 = new NormalUser("a@a.com", "user1", "pass1", 1, "Football");
-        NormalUser user2 = new NormalUser("b@b.com", "user2", "pass2", 2, "Basketball");
+        NormalUser user1 = new NormalUser("a@a.com", "user1", "pass1", 1, "Football", "20.00");
+        NormalUser user2 = new NormalUser("b@b.com", "user2", "pass2", 2, "Basketball", "19.00");
 
         HashMap<String, NormalUser> users = new HashMap<>();
         users.put(user1.getUsername(), user1);

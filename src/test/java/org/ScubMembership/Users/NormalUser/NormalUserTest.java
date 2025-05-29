@@ -44,7 +44,7 @@ class NormalUserTest {
         String sport = "Football";
         String time = "Afternoon (12:00 - 17:00)";
 
-        NormalUser newUser = new NormalUser(email, username, password, id, sport, sport);
+        NormalUser newUser = new NormalUser(email, username, password, id, sport, time);
 
         assertEquals(email, newUser.getEmail());
         assertEquals(username, newUser.getUsername());
