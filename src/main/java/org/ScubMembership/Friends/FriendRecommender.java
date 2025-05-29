@@ -5,14 +5,20 @@ import org.ScubMembership.QuizzSystem.QuizLeaderboardManager;
 import org.ScubMembership.SportActivity.EventManager;
 import org.ScubMembership.SportActivity.SportEvent;
 import org.ScubMembership.Users.NormalUser.NormalUser;
+import org.ScubMembership.Utils.UserStorage;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class FriendRecommender {
 
-    public static List<NormalUser> getRecommendedFriends(NormalUser currentUser, List<NormalUser> allUsers) {
+    public static List<NormalUser> getRecommendedFriends(NormalUser currentUser) {
         Map<NormalUser, Integer> scoreMap = new HashMap<>();
+        Map<String, NormalUser> users = UserStorage.loadUsers();
+        List<NormalUser> allUsers = new ArrayList<>();
+        for(NormalUser user : users.values()) {
+            allUsers.add(user);
+        }
 
         for(NormalUser candidate : allUsers) {
             if(candidate.getUsername().equals(currentUser.getUsername())) continue;
