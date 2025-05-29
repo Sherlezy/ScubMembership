@@ -20,7 +20,10 @@ public class ShowAllNormalUsers {
             System.out.println("- " + user.getUsername() +
                     " | Email: " + user.getEmail() +
                     " | ID: " + user.getID() +
-                    " | Sport: " + user.getPreferredSport());
+                    " | Sport: " + user.getPreferredSport() +
+                    " | Timeslot: " + user.getPreferredTimeSlot());
+
+
         }
     }
 }
