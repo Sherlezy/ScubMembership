@@ -9,13 +9,23 @@ public class NormalUser implements Serializable {
     public String password;
     public int ID;
     public String preferredSport;
+    private String preferredTimeSlot;  // NEW FIELD
 
-    public NormalUser (String email, String username, String password, int ID, String preferredSport){
+    public NormalUser(String email, String username, String password, int ID, String preferredSport, String preferredTimeSlot) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.ID = ID;
         this.preferredSport = preferredSport;
+        this.preferredTimeSlot = preferredTimeSlot;
+    }
+
+    public String getPreferredTimeSlot() {
+        return preferredTimeSlot;
+    }
+
+    public void setPreferredTimeSlot(String preferredTimeSlot) {
+        this.preferredTimeSlot = preferredTimeSlot;
     }
 
     public String getEmail() {
