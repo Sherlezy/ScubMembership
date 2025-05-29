@@ -1,6 +1,8 @@
 package org.ScubMembership.Users.NormalUser;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NormalUser implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -10,6 +12,9 @@ public class NormalUser implements Serializable {
     public int ID;
     public String preferredSport;
     private String preferredTimeSlot;  // NEW FIELD
+    private List<String> friends = new ArrayList<>(); // NEW FIELD
+    private List<String> sentFriendRequest = new ArrayList<>(); // NEW FIELD
+    private List<String> receivedFriendRequest = new ArrayList<>(); // NEW FIELD
 
     public NormalUser(String email, String username, String password, int ID, String preferredSport, String preferredTimeSlot) {
         this.email = email;
@@ -26,6 +31,40 @@ public class NormalUser implements Serializable {
 
     public void setPreferredTimeSlot(String preferredTimeSlot) {
         this.preferredTimeSlot = preferredTimeSlot;
+    }
+
+    public List<String> getFriends() {return friends;}
+
+    public List<String> getSentFriendRequest() {return sentFriendRequest;}
+
+    public List<String> getReceivedFriendRequest() {return receivedFriendRequest;}
+
+    public void sendFriendRequest(String toUsername) {
+        if(!sentFriendRequest.contains(toUsername)) {
+            sentFriendRequest.add(toUsername);
+        }
+    }
+
+    public void receiveFriendRequest(String fromUsername) {
+        if(!receivedFriendRequest.contains(fromUsername)) {
+            receivedFriendRequest.add(fromUsername);
+        }
+    }
+
+    public void acceptFriendRequest(String fromUsername) {
+        if(receivedFriendRequest.remove(fromUsername)) {
+            friends.add(fromUsername);
+        }
+    }
+
+    public void confirmFriendship(String otherUsername) {
+        if(!friends.contains(otherUsername)) {
+            friends.add(otherUsername);
+        }
+    }
+
+    public void rejectFriendRequest(String fromUsername) {
+        receivedFriendRequest.remove(fromUsername);
     }
 
     public String getEmail() {
