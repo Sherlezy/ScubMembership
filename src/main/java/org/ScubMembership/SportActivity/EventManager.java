@@ -1,6 +1,8 @@
 package org.ScubMembership.SportActivity;
 
 import org.ScubMembership.RecommendationLogic.TimeSlotSuggester;
+import org.ScubMembership.RecommendationLogic.WhatSportSuggester;
+
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -14,7 +16,11 @@ public class EventManager {
 
     public static void createEvent(List<abs_sport> availableSports) {
         Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\n📢 System Recommendation (based on user preferences and feedback):");
+        WhatSportSuggester.suggestSportAndTimeSlot();
         System.out.println("\n📅 Create a new Event");
+
 
         System.out.println("Available Sports: ");
         for (int i = 0; i < availableSports.size(); i++) {
