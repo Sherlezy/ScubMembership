@@ -1,2 +1,4 @@
-package org.ScubMembership.Friends;public class FriendManager {
+package org.ScubMembership.Friends;
+
+public class FriendManager {
 }
