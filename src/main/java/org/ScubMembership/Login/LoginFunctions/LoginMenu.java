@@ -7,8 +7,12 @@ import org.ScubMembership.QuizzSystem.LeaderboardDisplay;
 import org.ScubMembership.QuizzSystem.QuizMenu;
 import org.ScubMembership.QuizzSystem.QuizRunner;
 import org.ScubMembership.SportActivity.SportRegistry;
+import org.ScubMembership.Users.NormalUser.NormalUser;
+import org.ScubMembership.Utils.UserStorage;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class LoginMenu {
@@ -36,6 +40,7 @@ public class LoginMenu {
             System.out.println("7. View a Sport's Leaderboard");
             System.out.println("8. Register for an event");
             System.out.println("9. Leave a feedback on an event");
+            System.out.println("10. Send a friend request");
             System.out.print("Option: ");
             String option = scanner.nextLine();
 
@@ -67,6 +72,9 @@ public class LoginMenu {
                     break;
                 case "9":
                     LeaveFeedback.execute(loginPage);
+                    break;
+                case "10":
+                    SendFriendRequestUI.execute(loginPage);
                     break;
                 default:
                     System.out.println("❌ Invalid option. Please try again.");
