@@ -129,7 +129,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithDuplicateEmail(){
-        NormalUser existingUser = new NormalUser("existing@example.com", "existinguser", "pass", 1, "Soccer");
+        NormalUser existingUser = new NormalUser("existing@example.com", "existinguser", "pass", 1, "Soccer", "Morning (17:00 - 21:00)");
         loginInfo.put("existinguser", existingUser);
 
         String input = "existing@example.com\nnew@example.com\nnewuser\nnewpass\nBasketball\n3\n2";
@@ -156,7 +156,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithDuplicateUsername(){
-        NormalUser existingUser = new NormalUser("duplicate@example.com", "duplicateuser", "duplicatepass", 1, "Basketball" );
+        NormalUser existingUser = new NormalUser("duplicate@example.com", "duplicateuser", "duplicatepass", 1, "Basketball", "Evening (17:00 - 21:00)" );
         loginInfo.put("duplicateuser", existingUser);
 
         String input = "new@example.com\nduplicateuser\nnewuser\nnewpass\nFootball\n3\n2";
@@ -178,7 +178,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithCaseInsensitiveEmailDuplicate(){
-        NormalUser existingUser = new NormalUser("EXISTING@EXAMPLE.COM", "existinguser", "pass", 1, "Basketball");
+        NormalUser existingUser = new NormalUser("EXISTING@EXAMPLE.COM", "existinguser", "pass", 1, "Basketball", "Afternoon (17:00 - 21:00)");
         loginInfo.put("existinguser", existingUser);
 
         String input = "existing@example.com\nnew@example.com\nnewuser\nnewpass\nSoccer\n3\n2";
@@ -255,8 +255,8 @@ public class RegistrationProcessTest {
 
     @Test
     void testMultipleDuplicateUsernamesBeforeUnique() {
-        loginInfo.put("taken1", new NormalUser("email1@example.com", "taken1", "pass", 1, "Sport"));
-        loginInfo.put("taken2", new NormalUser("email2@example.com", "taken2", "pass", 2, "Sport"));
+        loginInfo.put("taken1", new NormalUser("email1@example.com", "taken1", "pass", 1, "Sport", "Evening (17:00 - 21:00)"));
+        loginInfo.put("taken2", new NormalUser("email2@example.com", "taken2", "pass", 2, "Sport", "Evening (17:00 - 21:00)"));
 
         String input = "new@example.com\ntaken1\ntaken2\navailable\npassword\nFootball\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));

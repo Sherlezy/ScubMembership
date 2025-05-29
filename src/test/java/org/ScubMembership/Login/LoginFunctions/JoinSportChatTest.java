@@ -21,7 +21,7 @@ public class JoinSportChatTest {
 
     @BeforeEach
     void setup() {
-        NormalUser user = new NormalUser("u@unibz.it", "testUser", "pass", 1, "Basketball");
+        NormalUser user = new NormalUser("u@unibz.it", "testUser", "pass", 1, "Basketball", "Morning (08:00 - 12:00)");
 
         SportRegistry.SPORTS.clear();
         SportRegistry.SPORTS.add(new Basketball());

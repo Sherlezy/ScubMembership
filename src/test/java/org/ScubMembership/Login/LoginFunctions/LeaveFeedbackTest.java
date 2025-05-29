@@ -24,7 +24,7 @@ public class LeaveFeedbackTest {
 
     @BeforeEach
     void setup() {
-        mockUser = new NormalUser("u@unibz.it", "testUser", "pass", 1, "Cycling");
+        mockUser = new NormalUser("u@unibz.it", "testUser", "pass", 1, "Cycling", "Morning (08:00 - 12:00)");
         loginPage = new LoginPage(new HashMap<>());
         loginPage.setCurrentUser(mockUser);
 
