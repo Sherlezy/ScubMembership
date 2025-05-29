@@ -19,7 +19,7 @@ class LoginPageTest {
     @BeforeEach
     void setUp() {
         testLoginInfo = new HashMap<>();
-        testUser = new NormalUser("test@example.com", "testuser", "testpass", 1, "Basketball");
+        testUser = new NormalUser("test@example.com", "testuser", "testpass", 1, "Basketball", "testTime");
         testLoginInfo.put("testuser", testUser);
 
         loginPage = new LoginPage(testLoginInfo);
@@ -63,7 +63,7 @@ class LoginPageTest {
     void testGetLoginInfoReturnsReference() {
         HashMap<String, NormalUser> result = loginPage.getLoginInfo();
 
-        NormalUser newUser = new NormalUser("new@example.com", "newuser", "newpass", 2, "Football");
+        NormalUser newUser = new NormalUser("new@example.com", "newuser", "newpass", 2, "Football", "testTime");
         result.put("newuser", newUser);
 
         assertTrue(loginPage.getLoginInfo().containsKey("newuser"));
@@ -156,7 +156,7 @@ class LoginPageTest {
         loginPage.setCurrentUser(testUser);
         assertEquals(testUser, loginPage.getCurrentUser());
 
-        NormalUser secondUser = new NormalUser("second@example.com", "seconduser", "secondpass", 2, "Tennis");
+        NormalUser secondUser = new NormalUser("second@example.com", "seconduser", "secondpass", 2, "Tennis", "secondTest");
         loginPage.setCurrentUser(secondUser);
 
         assertEquals(secondUser, loginPage.getCurrentUser());
