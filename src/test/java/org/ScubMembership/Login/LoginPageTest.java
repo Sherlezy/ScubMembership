@@ -187,14 +187,14 @@ class LoginPageTest {
     void testStateIndependence() {
         loginPage.setLoggedIn(true);
         assertTrue(loginPage.isLoggedIn());
-        assertNull(loginPage.getCurrentUser()); // Should still be null
+        assertNull(loginPage.getCurrentUser());
 
         loginPage.setCurrentUser(testUser);
         assertEquals(testUser, loginPage.getCurrentUser());
-        assertTrue(loginPage.isLoggedIn()); // Should still be true
+        assertTrue(loginPage.isLoggedIn());
 
         loginPage.setLoggedIn(false);
         assertFalse(loginPage.isLoggedIn());
-        assertEquals(testUser, loginPage.getCurrentUser()); // Should still be testUser
+        assertEquals(testUser, loginPage.getCurrentUser());
     }
 }
