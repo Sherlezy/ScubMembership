@@ -1,5 +1,7 @@
 package org.ScubMembership.Users.NormalUser;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,5 +116,12 @@ public class NormalUser implements Serializable {
 
     public void setPreferredSport(String preferredSport){
         this.preferredSport = preferredSport;
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        if(friends == null) friends = new ArrayList<>();
+        if(sentFriendRequest == null) sentFriendRequest = new ArrayList<>();
+        if(receivedFriendRequest == null) receivedFriendRequest = new ArrayList<>();
     }
 }
