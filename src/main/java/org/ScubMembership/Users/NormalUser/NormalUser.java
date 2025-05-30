@@ -33,11 +33,20 @@ public class NormalUser implements Serializable {
         this.preferredTimeSlot = preferredTimeSlot;
     }
 
-    public List<String> getFriends() {return friends;}
+    public List<String> getFriends() {
+        if(friends == null) friends = new ArrayList<>();
+        return friends;
+    }
 
-    public List<String> getSentFriendRequest() {return sentFriendRequest;}
+    public List<String> getSentFriendRequest() {
+        if(sentFriendRequest == null) sentFriendRequest = new ArrayList<>();
+        return sentFriendRequest;
+    }
 
-    public List<String> getReceivedFriendRequest() {return receivedFriendRequest;}
+    public List<String> getReceivedFriendRequest() {
+        if(receivedFriendRequest == null) receivedFriendRequest = new ArrayList<>();
+        return receivedFriendRequest;
+    }
 
     public void sendFriendRequest(String toUsername) {
         if(!sentFriendRequest.contains(toUsername)) {
