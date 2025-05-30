@@ -20,7 +20,7 @@ public class SendFriendRequestUI {
         allUsers.removeIf(user -> user.getUsername().equals(currentUser.getUsername()));
 
         while (true) {
-            System.out.println("\\n=== \uD83E\uDD1D Friend Request Menu ===");
+            System.out.println("\n=== \uD83E\uDD1D Friend Request Menu ===");
             System.out.println("1. View Recommended Friends");
             System.out.println("2. Search by username");
             System.out.println("0. Back to menu");
