@@ -39,8 +39,7 @@ public class LoginMenu {
             System.out.println("6. Take a Quiz for Another Sport");
             System.out.println("7. View a Sport's Leaderboard");
             System.out.println("8. Register for an event");
-            System.out.println("9. Leave a feedback on an event");
-            System.out.println("10. Send a friend request");
+            System.out.println("9. Friends menu");
             System.out.print("Option: ");
             String option = scanner.nextLine();
 
@@ -74,7 +73,7 @@ public class LoginMenu {
                     LeaveFeedback.execute(loginPage);
                     break;
                 case "10":
-                    SendFriendRequestUI.execute(loginPage);
+                    FriendsMenuUI.execute(loginPage);
                     break;
                 default:
                     System.out.println("❌ Invalid option. Please try again.");
