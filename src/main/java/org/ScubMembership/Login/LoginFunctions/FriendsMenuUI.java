@@ -14,7 +14,8 @@ public class FriendsMenuUI {
             System.out.println("1. Send a friend request");
             System.out.println("2. View my friends");
             System.out.println("3. Accept friend request");
-            System.out.println("4. View pending friend requests");
+            System.out.println("4. Reject friend request");
+            System.out.println("5. View pending friend requests");
             System.out.println("0. Return to the main menu");
             System.out.println("Enter your choice: ");
             String choice = scanner.nextLine();
@@ -27,9 +28,12 @@ public class FriendsMenuUI {
                     ViewFriendsUI.execute(loginPage);
                     break;
                 case "3":
-                    AcceptFriendRequest.execute(loginPage);
+                    AcceptFriendRequestUI.execute(loginPage);
                     break;
                 case "4":
+                    RejectFriendRequestUI.execute(loginPage);
+                    break;
+                case "5":
                     ViewPendingRequestsUI.execute(loginPage);
                     break;
                 case "0":

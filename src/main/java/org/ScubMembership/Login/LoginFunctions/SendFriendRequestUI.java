@@ -64,6 +64,7 @@ public class SendFriendRequestUI {
             boolean success = sendFriendRequest(currentUser, selected);
             if(success) {
                 System.out.println("✅ Friend request sent to " + selected.getUsername());
+                UserStorage.saveUsers((HashMap<String, NormalUser>) allUsers);
             } else {
                 System.out.println("⚠\uFE0F Could not send request (maybe already friends or request sent)");
             }
