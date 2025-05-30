@@ -1,6 +1,7 @@
 package org.ScubMembership.Login.LoginFunctions;
 
 import org.ScubMembership.Login.LoginPage;
+import org.ScubMembership.PasswordSecurity.PasswordEncryptor;
 import org.ScubMembership.Users.NormalUser.NormalUser;
 import org.ScubMembership.Utils.UserStorage;
 
@@ -23,7 +24,7 @@ public class ChangePassword {
         System.out.print("Enter current password: ");
         String currentPassword = scanner.nextLine();
 
-        if (currentUser.getPassword().equals(currentPassword)) {
+        if (currentUser.getPassword().equals(PasswordEncryptor.hashPassword(currentPassword))) {
             System.out.print("Enter new password: ");
             String newPassword = scanner.nextLine();
 
@@ -31,7 +32,7 @@ public class ChangePassword {
             String confirmPassword = scanner.nextLine();
 
             if (newPassword.equals(confirmPassword)) {
-                currentUser.setPassword(newPassword);
+                currentUser.setPassword(PasswordEncryptor.hashPassword(newPassword));
                 UserStorage.saveUsers(loginInfo);
                 System.out.println("Password changed successfully!");
 
