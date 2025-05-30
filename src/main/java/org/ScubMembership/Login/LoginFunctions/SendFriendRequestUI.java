@@ -82,6 +82,7 @@ public class SendFriendRequestUI {
 
         if(matches.isEmpty()) {
             System.out.println("❌ No users found with that name");
+            return;
         }
 
         System.out.println("\uD83D\uDD0D Search result:");
