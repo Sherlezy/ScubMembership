@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import static org.ScubMembership.Friends.FriendRequest.acceptFriendRequest;
 
-public class AcceptFriendRequest {
+public class AcceptFriendRequestUI {
     public static void execute(LoginPage loginPage) {
         Scanner scanner = loginPage.getScanner();
         NormalUser currentUser = loginPage.getCurrentUser();
@@ -23,7 +23,7 @@ public class AcceptFriendRequest {
             return;
         }
 
-        System.out.println("\uD83D\uDCED received friend requests: ");
+        System.out.println("\uD83D\uDCED Received friend requests: ");
         for(int i = 0; i < requests.size(); i++) {
             System.out.println((i+1) + ". " + requests.get(i));
         }
