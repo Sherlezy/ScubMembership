@@ -2,7 +2,6 @@ package org.ScubMembership.Utils;
 
 import org.ScubMembership.Login.AdminFunctions.AdminMenu;
 import org.ScubMembership.Login.LoginFunctions.LoginMenu;
-import org.ScubMembership.Login.LoginFunctions.StartLoginProcess;
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.Registration.RegistrationProcess;
 import org.ScubMembership.Users.Admin.Admin;

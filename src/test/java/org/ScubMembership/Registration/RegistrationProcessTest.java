@@ -62,22 +62,12 @@ public class RegistrationProcessTest {
 
     @Test
     void testSuccessfulRegistration() {
-        String input = "test@example.com\ntestuser\ntestpass\nClimbing\n3\n2";
+        String input = "test@example.com\ntestuser\nTestPass123!\n1\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
-//        Queste tre righe simulano l'input dell'utente e lo passa al ByteArrayInputStream che lo trasforma in un flusso che lo scanner può leggere:
-//        sarebbe come scrivere tipo:
-//        test@example.com [INVIO]
-//        testuser [INVIO]
-//        testpass [INVIO]
-//        Soccer [INVIO]
 
         emailValidatorMockedStatic.when(() -> EmailValidator.isValidEmail("test@example.com"))
                 .thenReturn(true);
-//        Cosa fa:
-//        Nel codice originale c'è: if(!EmailValidator.isValidEmail(email))
-//        Dico al mock: "Quando viene chiamato con 'test@example.com', restituisci true"
-//        Così il test non dipende dalla logica reale di validazione email
 
         registrationProcess = new RegistrationProcess(mockLoginPage);
 
@@ -89,9 +79,8 @@ public class RegistrationProcessTest {
         NormalUser registeredUser = loginInfo.get("testuser");
         assertEquals("test@example.com", registeredUser.getEmail());
         assertEquals("testuser", registeredUser.getUsername());
-        assertEquals("testpass", registeredUser.getPassword());
         assertEquals(1, registeredUser.getID());
-        assertEquals("Climbing", registeredUser.getPreferredSport());
+        assertEquals("Tennis", registeredUser.getPreferredSport());
 
         assertEquals(1, registrationProcess.getRegisteredUsers().size());
 
@@ -105,7 +94,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithInvalidEmailThenValid(){
-        String input = "invalid-email\nvalid@example.com\ntestuser\ntestpass\nSoccer\n3\n2";
+        String input = "invalid-email\nvalid@example.com\ntestuser\nTestPass123!\n2\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -129,10 +118,10 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithDuplicateEmail(){
-        NormalUser existingUser = new NormalUser("existing@example.com", "existinguser", "pass", 1, "Soccer", "Morning (17:00 - 21:00)");
+        NormalUser existingUser = new NormalUser("existing@example.com", "existinguser", "pass", 1, "Basketball", "Morning (08:00 - 12:00)");
         loginInfo.put("existinguser", existingUser);
 
-        String input = "existing@example.com\nnew@example.com\nnewuser\nnewpass\nBasketball\n3\n2";
+        String input = "existing@example.com\nnew@example.com\nnewuser\nTestPass123!\n3\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -159,7 +148,7 @@ public class RegistrationProcessTest {
         NormalUser existingUser = new NormalUser("duplicate@example.com", "duplicateuser", "duplicatepass", 1, "Basketball", "Evening (17:00 - 21:00)" );
         loginInfo.put("duplicateuser", existingUser);
 
-        String input = "new@example.com\nduplicateuser\nnewuser\nnewpass\nFootball\n3\n2";
+        String input = "new@example.com\nduplicateuser\nnewuser\nTestPass123!\n4\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -178,10 +167,10 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithCaseInsensitiveEmailDuplicate(){
-        NormalUser existingUser = new NormalUser("EXISTING@EXAMPLE.COM", "existinguser", "pass", 1, "Basketball", "Afternoon (17:00 - 21:00)");
+        NormalUser existingUser = new NormalUser("EXISTING@EXAMPLE.COM", "existinguser", "pass", 1, "Basketball", "Afternoon (12:00 - 17:00)");
         loginInfo.put("existinguser", existingUser);
 
-        String input = "existing@example.com\nnew@example.com\nnewuser\nnewpass\nSoccer\n3\n2";
+        String input = "existing@example.com\nnew@example.com\nnewuser\nTestPass123!\n5\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -202,7 +191,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithEmptyInputHandling() {
-        String input = "   valid@example.com   \n   testuser   \ntestpass\nSport\n3\n2";
+        String input = "   valid@example.com   \n   testuser   \nTestPass123!\n6\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -228,7 +217,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testMultipleInvalidEmailsBeforeValid() {
-        String input = "bad1\nbad2\nbad3\ngood@example.com\ntester\npass123\nHockey\n3\n2";
+        String input = "bad1\nbad2\nbad3\ngood@example.com\ntester\nTestPass123!\n7\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -258,7 +247,7 @@ public class RegistrationProcessTest {
         loginInfo.put("taken1", new NormalUser("email1@example.com", "taken1", "pass", 1, "Sport", "Evening (17:00 - 21:00)"));
         loginInfo.put("taken2", new NormalUser("email2@example.com", "taken2", "pass", 2, "Sport", "Evening (17:00 - 21:00)"));
 
-        String input = "new@example.com\ntaken1\ntaken2\navailable\npassword\nFootball\n3\n2";
+        String input = "new@example.com\ntaken1\ntaken2\navailable\nTestPass123!\n8\n3\n2";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
