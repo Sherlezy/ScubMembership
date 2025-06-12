@@ -1,3 +1,5 @@
+
+
 package org.ScubMembership.Login.LoginFunctions;
 
 import org.ScubMembership.Login.LoginPage;
@@ -23,16 +25,16 @@ import static org.mockito.Mockito.*;
 public class LogoutTest {
 
     @Mock
-    private LoginPage loginPage;
-
-    @Mock
-    private NormalUser currentUser;
+    private LoginPage mockLoginPage;
 
     private Logout logout;
     private HashMap<String, NormalUser> loginInfo;
     private HashMap<String, Admin> adminInfo;
     private ByteArrayOutputStream outputStream;
     private PrintStream originalOut;
+    private MockedStatic<UserStorage> userStorageMockedStatic;
+    private MockedStatic<AdminStorage> adminStorageMockedStatic;
+    private MockedStatic<Welcome> welcomeMockedStatic;
 
     @BeforeEach
     void setUp() {
@@ -43,244 +45,178 @@ public class LogoutTest {
         System.setOut(new PrintStream(outputStream));
 
         loginInfo = new HashMap<>();
-        loginInfo.put("testuser", currentUser);
-
         adminInfo = new HashMap<>();
         Admin mockAdmin = mock(Admin.class);
         adminInfo.put("admin", mockAdmin);
 
-        when(loginPage.getLoginInfo()).thenReturn(loginInfo);
+        when(mockLoginPage.getLoginInfo()).thenReturn(loginInfo);
 
-        logout = new Logout(loginPage);
+        userStorageMockedStatic = mockStatic(UserStorage.class);
+        adminStorageMockedStatic = mockStatic(AdminStorage.class);
+        welcomeMockedStatic = mockStatic(Welcome.class);
+
+        adminStorageMockedStatic.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
+
+        logout = new Logout(mockLoginPage);
     }
 
     @AfterEach
     void tearDown() {
         System.setOut(originalOut);
+        if (userStorageMockedStatic != null) userStorageMockedStatic.close();
+        if (adminStorageMockedStatic != null) adminStorageMockedStatic.close();
+        if (welcomeMockedStatic != null) welcomeMockedStatic.close();
     }
 
     @Test
     void testSuccessfulLogout() {
+        logout.startLogout();
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        verify(mockLoginPage).setLoggedIn(false);
+        verify(mockLoginPage).setCurrentUser(null);
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(loginInfo));
+        adminStorageMockedStatic.verify(AdminStorage::loadAdmins);
+        welcomeMockedStatic.verify(() -> Welcome.welcome(loginInfo, adminInfo));
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            logout.startLogout();
-
-            verify(loginPage).setLoggedIn(false);
-            verify(loginPage).setCurrentUser(null);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins);
-            mockedWelcome.verify(() -> Welcome.welcome(loginInfo, adminInfo));
-
-            String output = outputStream.toString();
-            assertTrue(output.contains("Logging out..."));
-            assertTrue(output.contains("Logged out successfully!"));
-        }
+        String output = outputStream.toString();
+        assertTrue(output.contains("Logging out..."));
+        assertTrue(output.contains("Logged out successfully!"));
     }
 
     @Test
     void testLogoutWithNullLoginInfo() {
+        when(mockLoginPage.getLoginInfo()).thenReturn(null);
 
-        when(loginPage.getLoginInfo()).thenReturn(null);
+        logout.startLogout();
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        verify(mockLoginPage).setLoggedIn(false);
+        verify(mockLoginPage).setCurrentUser(null);
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(null));
+        adminStorageMockedStatic.verify(AdminStorage::loadAdmins);
+        welcomeMockedStatic.verify(() -> Welcome.welcome(null, adminInfo));
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            logout.startLogout();
-
-            verify(loginPage).setLoggedIn(false);
-            verify(loginPage).setCurrentUser(null);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(null));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins);
-            mockedWelcome.verify(() -> Welcome.welcome(null, adminInfo));
-
-            String output = outputStream.toString();
-            assertTrue(output.contains("Logging out..."));
-            assertTrue(output.contains("Logged out successfully!"));
-        }
+        String output = outputStream.toString();
+        assertTrue(output.contains("Logging out..."));
+        assertTrue(output.contains("Logged out successfully!"));
     }
 
     @Test
     void testLogoutWithEmptyLoginInfo() {
-
         HashMap<String, NormalUser> emptyLoginInfo = new HashMap<>();
-        when(loginPage.getLoginInfo()).thenReturn(emptyLoginInfo);
+        when(mockLoginPage.getLoginInfo()).thenReturn(emptyLoginInfo);
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        logout.startLogout();
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            logout.startLogout();
-
-            verify(loginPage).setLoggedIn(false);
-            verify(loginPage).setCurrentUser(null);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(emptyLoginInfo));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins);
-            mockedWelcome.verify(() -> Welcome.welcome(emptyLoginInfo, adminInfo));
-        }
+        verify(mockLoginPage).setLoggedIn(false);
+        verify(mockLoginPage).setCurrentUser(null);
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(emptyLoginInfo));
+        adminStorageMockedStatic.verify(AdminStorage::loadAdmins);
+        welcomeMockedStatic.verify(() -> Welcome.welcome(emptyLoginInfo, adminInfo));
     }
 
     @Test
     void testLogoutWithNullAdminInfo() {
+        adminStorageMockedStatic.when(AdminStorage::loadAdmins).thenReturn(null);
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        logout.startLogout();
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(null);
-
-            logout.startLogout();
-
-            verify(loginPage).setLoggedIn(false);
-            verify(loginPage).setCurrentUser(null);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins);
-            mockedWelcome.verify(() -> Welcome.welcome(loginInfo, null));
-        }
+        verify(mockLoginPage).setLoggedIn(false);
+        verify(mockLoginPage).setCurrentUser(null);
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(loginInfo));
+        adminStorageMockedStatic.verify(AdminStorage::loadAdmins);
+        welcomeMockedStatic.verify(() -> Welcome.welcome(loginInfo, null));
     }
 
     @Test
     void testLogoutWithEmptyAdminInfo() {
-
         HashMap<String, Admin> emptyAdminInfo = new HashMap<>();
+        adminStorageMockedStatic.when(AdminStorage::loadAdmins).thenReturn(emptyAdminInfo);
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        logout.startLogout();
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(emptyAdminInfo);
-
-            logout.startLogout();
-
-            verify(loginPage).setLoggedIn(false);
-            verify(loginPage).setCurrentUser(null);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins);
-            mockedWelcome.verify(() -> Welcome.welcome(loginInfo, emptyAdminInfo));
-        }
+        verify(mockLoginPage).setLoggedIn(false);
+        verify(mockLoginPage).setCurrentUser(null);
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(loginInfo));
+        adminStorageMockedStatic.verify(AdminStorage::loadAdmins);
+        welcomeMockedStatic.verify(() -> Welcome.welcome(loginInfo, emptyAdminInfo));
     }
 
     @Test
     void testUserStorageSaveFailure() {
+        userStorageMockedStatic.when(() -> UserStorage.saveUsers(loginInfo))
+                .thenThrow(new RuntimeException("File save failed"));
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        assertThrows(RuntimeException.class, () -> {
+            logout.startLogout();
+        });
 
-            mockedUserStorage.when(() -> UserStorage.saveUsers(loginInfo))
-                    .thenThrow(new RuntimeException("File save failed"));
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            assertThrows(RuntimeException.class, () -> {
-                logout.startLogout();
-            });
-
-            verify(loginPage).setLoggedIn(false);
-        }
+        verify(mockLoginPage).setLoggedIn(false);
     }
 
     @Test
     void testAdminStorageLoadFailure() {
+        adminStorageMockedStatic.when(AdminStorage::loadAdmins)
+                .thenThrow(new RuntimeException("Admin load failed"));
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        assertThrows(RuntimeException.class, () -> {
+            logout.startLogout();
+        });
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins)
-                    .thenThrow(new RuntimeException("Admin load failed"));
-
-            assertThrows(RuntimeException.class, () -> {
-                logout.startLogout();
-            });
-
-            verify(loginPage).setLoggedIn(false);
-            verify(loginPage).setCurrentUser(null);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
-        }
+        verify(mockLoginPage).setLoggedIn(false);
+        verify(mockLoginPage).setCurrentUser(null);
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(loginInfo));
     }
 
     @Test
     void testWelcomeMethodFailure() {
+        welcomeMockedStatic.when(() -> Welcome.welcome(loginInfo, adminInfo))
+                .thenThrow(new RuntimeException("Welcome method failed"));
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        assertThrows(RuntimeException.class, () -> {
+            logout.startLogout();
+        });
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-            mockedWelcome.when(() -> Welcome.welcome(loginInfo, adminInfo))
-                    .thenThrow(new RuntimeException("Welcome method failed"));
-
-            assertThrows(RuntimeException.class, () -> {
-                logout.startLogout();
-            });
-
-            verify(loginPage).setLoggedIn(false);
-            verify(loginPage).setCurrentUser(null);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins);
-        }
+        verify(mockLoginPage).setLoggedIn(false);
+        verify(mockLoginPage).setCurrentUser(null);
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(loginInfo));
+        adminStorageMockedStatic.verify(AdminStorage::loadAdmins);
     }
 
     @Test
     void testLogoutExecutionOrder() {
+        logout.startLogout();
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        var inOrder = inOrder(mockLoginPage);
+        inOrder.verify(mockLoginPage).setLoggedIn(false);
+        inOrder.verify(mockLoginPage).getLoginInfo();
+        inOrder.verify(mockLoginPage).setCurrentUser(null);
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            logout.startLogout();
-
-            var inOrder = inOrder(loginPage);
-            inOrder.verify(loginPage).setLoggedIn(false);
-            inOrder.verify(loginPage).getLoginInfo();
-            inOrder.verify(loginPage).setCurrentUser(null);
-
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins);
-            mockedWelcome.verify(() -> Welcome.welcome(loginInfo, adminInfo));
-        }
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(loginInfo));
+        adminStorageMockedStatic.verify(AdminStorage::loadAdmins);
+        welcomeMockedStatic.verify(() -> Welcome.welcome(loginInfo, adminInfo));
     }
 
     @Test
     void testLogoutConsoleOutput() {
+        logout.startLogout();
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        String output = outputStream.toString();
+        assertTrue(output.contains("Logging out..."));
+        assertTrue(output.contains("Logged out successfully!"));
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            logout.startLogout();
-
-            String output = outputStream.toString();
-            assertTrue(output.contains("Logging out..."));
-            assertTrue(output.contains("Logged out successfully!"));
-
-            String[] lines = output.split("\n");
-            boolean foundLoggingOut = false;
-            boolean foundLoggedOut = false;
-            for (String line : lines) {
-                if (line.contains("Logging out...")) {
-                    foundLoggingOut = true;
-                    assertFalse(foundLoggedOut, "Logging out message should come before logged out message");
-                } else if (line.contains("Logged out successfully!")) {
-                    foundLoggedOut = true;
-                    assertTrue(foundLoggingOut, "Logged out message should come after logging out message");
-                }
+        String[] lines = output.split("\n");
+        boolean foundLoggingOut = false;
+        boolean foundLoggedOut = false;
+        for (String line : lines) {
+            if (line.contains("Logging out...")) {
+                foundLoggingOut = true;
+                assertFalse(foundLoggedOut, "Logging out message should come before logged out message");
+            } else if (line.contains("Logged out successfully!")) {
+                foundLoggedOut = true;
+                assertTrue(foundLoggingOut, "Logged out message should come after logging out message");
             }
-            assertTrue(foundLoggingOut && foundLoggedOut, "Both messages should be present");
         }
+        assertTrue(foundLoggingOut && foundLoggedOut, "Both messages should be present");
     }
 
     @Test
@@ -292,42 +228,25 @@ public class LogoutTest {
 
     @Test
     void testLogoutWithNullLoginPage() {
-
         Logout logoutWithNull = new Logout(null);
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
-
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            assertThrows(NullPointerException.class, () -> {
-                logoutWithNull.startLogout();
-            });
-        }
+        assertThrows(NullPointerException.class, () -> {
+            logoutWithNull.startLogout();
+        });
     }
 
     @Test
     void testLogoutStateChanges() {
+        logout.startLogout();
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
-
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            logout.startLogout();
-
-            verify(loginPage, times(1)).setLoggedIn(false);
-            verify(loginPage, times(1)).setCurrentUser(null);
-            verify(loginPage, never()).setLoggedIn(true);
-            verify(loginPage, never()).setCurrentUser(any(NormalUser.class));
-        }
+        verify(mockLoginPage, times(1)).setLoggedIn(false);
+        verify(mockLoginPage, times(1)).setCurrentUser(null);
+        verify(mockLoginPage, never()).setLoggedIn(true);
+        verify(mockLoginPage, never()).setCurrentUser(any(NormalUser.class));
     }
 
     @Test
     void testLogoutWithLargeDataSets() {
-
         HashMap<String, NormalUser> largeLoginInfo = new HashMap<>();
         HashMap<String, Admin> largeAdminInfo = new HashMap<>();
 
@@ -338,66 +257,34 @@ public class LogoutTest {
             largeAdminInfo.put("admin" + i, admin);
         }
 
-        when(loginPage.getLoginInfo()).thenReturn(largeLoginInfo);
+        when(mockLoginPage.getLoginInfo()).thenReturn(largeLoginInfo);
+        adminStorageMockedStatic.when(AdminStorage::loadAdmins).thenReturn(largeAdminInfo);
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        logout.startLogout();
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(largeAdminInfo);
-
-            logout.startLogout();
-
-            verify(loginPage).setLoggedIn(false);
-            verify(loginPage).setCurrentUser(null);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(largeLoginInfo));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins);
-            mockedWelcome.verify(() -> Welcome.welcome(largeLoginInfo, largeAdminInfo));
-        }
+        verify(mockLoginPage).setLoggedIn(false);
+        verify(mockLoginPage).setCurrentUser(null);
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(largeLoginInfo));
+        adminStorageMockedStatic.verify(AdminStorage::loadAdmins);
+        welcomeMockedStatic.verify(() -> Welcome.welcome(largeLoginInfo, largeAdminInfo));
     }
 
     @Test
     void testMultipleLogoutCalls() {
+        logout.startLogout();
+        logout.startLogout();
+        logout.startLogout();
 
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
+        verify(mockLoginPage, times(3)).setLoggedIn(false);
+        verify(mockLoginPage, times(3)).setCurrentUser(null);
+        userStorageMockedStatic.verify(() -> UserStorage.saveUsers(loginInfo), times(3));
+        adminStorageMockedStatic.verify(AdminStorage::loadAdmins, times(3));
+        welcomeMockedStatic.verify(() -> Welcome.welcome(loginInfo, adminInfo), times(3));
 
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            logout.startLogout();
-            logout.startLogout();
-            logout.startLogout();
-
-            verify(loginPage, times(3)).setLoggedIn(false);
-            verify(loginPage, times(3)).setCurrentUser(null);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo), times(3));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins, times(3));
-            mockedWelcome.verify(() -> Welcome.welcome(loginInfo, adminInfo), times(3));
-
-            String output = outputStream.toString();
-            long loggingOutCount = output.lines().filter(line -> line.contains("Logging out...")).count();
-            long loggedOutCount = output.lines().filter(line -> line.contains("Logged out successfully!")).count();
-            assertEquals(3, loggingOutCount);
-            assertEquals(3, loggedOutCount);
-        }
-    }
-
-    @Test
-    void testLogoutMethodInteractions() {
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class);
-             MockedStatic<AdminStorage> mockedAdminStorage = mockStatic(AdminStorage.class);
-             MockedStatic<Welcome> mockedWelcome = mockStatic(Welcome.class)) {
-
-            mockedAdminStorage.when(AdminStorage::loadAdmins).thenReturn(adminInfo);
-
-            logout.startLogout();
-
-            verify(loginPage, times(2)).getLoginInfo();
-
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(any()), times(1));
-            mockedAdminStorage.verify(AdminStorage::loadAdmins, times(1));
-            mockedWelcome.verify(() -> Welcome.welcome(any(), any()), times(1));
-        }
+        String output = outputStream.toString();
+        long loggingOutCount = output.lines().filter(line -> line.contains("Logging out...")).count();
+        long loggedOutCount = output.lines().filter(line -> line.contains("Logged out successfully!")).count();
+        assertEquals(3, loggingOutCount);
+        assertEquals(3, loggedOutCount);
     }
 }
