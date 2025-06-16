@@ -5,13 +5,12 @@ import org.ScubMembership.Users.Admin.Admin;
 import org.ScubMembership.Utils.AdminStorage;
 import org.ScubMembership.Utils.UserStorage;
 import org.ScubMembership.Utils.Welcome;
+import org.ScubMembership.Users.NormalUser.NormalUser;
 
 import java.util.HashMap;
 
 public class Logout {
-
-    private LoginPage loginPage;
-
+    private final LoginPage loginPage;
 
     public Logout(LoginPage loginPage){
         this.loginPage = loginPage;
@@ -19,14 +18,22 @@ public class Logout {
 
     public void startLogout(){
         System.out.println("Logging out...");
-        loginPage.setLoggedIn(false);
+
+        // Save current user back to loginInfo
+        NormalUser currentUser = loginPage.getCurrentUser();
+        if (currentUser != null) {
+            loginPage.getLoginInfo().put(currentUser.getUsername(), currentUser);
+        }
+
+        // Save all users
         UserStorage.saveUsers(loginPage.getLoginInfo());
 
+        // Log out
         loginPage.setCurrentUser(null);
+        loginPage.setLoggedIn(false);
+
         System.out.println("Logged out successfully!");
         HashMap<String, Admin> adminInfo = AdminStorage.loadAdmins();
         Welcome.welcome(loginPage.getLoginInfo(), adminInfo);
-
     }
-
 }
