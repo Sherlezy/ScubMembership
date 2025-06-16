@@ -1,12 +1,13 @@
 package org.ScubMembership.Login;
 
 import org.ScubMembership.Users.NormalUser.NormalUser;
+import org.ScubMembership.Utils.UserStorage;
 
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class LoginPage {
-    protected final HashMap<String, NormalUser> loginInfo;
+    protected HashMap<String, NormalUser> loginInfo;
     private Scanner scanner;
     protected boolean loggedIn;
     protected NormalUser currentUser;
@@ -36,12 +37,26 @@ public class LoginPage {
     public NormalUser getCurrentUser(){
         return currentUser;
     }
-    public void setCurrentUser(NormalUser currentUser){
-        this.currentUser = currentUser;
+    public void setCurrentUser(NormalUser user) {
+        this.currentUser = user;
     }
 
     public void setScanner(Scanner scanner) {
         this.scanner = scanner;
     }
+
+    public void setLoginInfo(HashMap<String, NormalUser> loginInfo) {
+        this.loginInfo = loginInfo;
+    }
+
+    public void refreshCurrentUser() {
+        if (currentUser == null) return;
+        NormalUser updated = UserStorage.getUserByUsername(currentUser.getUsername());
+        if (updated != null) {
+            currentUser = updated;
+        }
+    }
+
+
 
 }

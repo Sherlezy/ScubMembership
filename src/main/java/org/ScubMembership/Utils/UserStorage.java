@@ -15,7 +15,6 @@ public class UserStorage {
     public static void saveUsers(HashMap<String, NormalUser> users) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))) {
             out.writeObject(users);
-            System.out.println("✅ User data saved.");
         } catch (IOException e) {
             System.out.println("❌ Failed to save users: " + e.getMessage());
         }
@@ -35,4 +34,10 @@ public class UserStorage {
         }
         return new HashMap<>();
     }
+
+    public static NormalUser getUserByUsername(String username) {
+        HashMap<String, NormalUser> allUsers = loadUsers();  // always fresh from disk
+        return allUsers.get(username);  // may be null if not found
+    }
+
 }
