@@ -3,6 +3,7 @@ package org.ScubMembership.Login.LoginFunctions;
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.Users.NormalUser.NormalUser;
 import org.ScubMembership.PasswordSecurity.PasswordEncryptor;
+import org.ScubMembership.Utils.UserStorage;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -16,7 +17,10 @@ public class LoginAttempt {
 
     public void startLoginAttempt() {
         Scanner scanner = loginPage.getScanner();
-        HashMap<String, NormalUser> loginInfo = loginPage.getLoginInfo();
+
+        // ❗️RELOAD USER DATA from disk
+        HashMap<String, NormalUser> freshLoginInfo = UserStorage.loadUsers();
+        loginPage.setLoginInfo(freshLoginInfo);  // update loginPage to hold latest user map
 
         System.out.print("Username: ");
         String username = scanner.nextLine();
@@ -24,14 +28,15 @@ public class LoginAttempt {
         System.out.print("Password: ");
         String password = scanner.nextLine();
 
-        if (loginInfo.containsKey(username)) {
-            NormalUser user = loginInfo.get(username);
+        if (freshLoginInfo.containsKey(username)) {
             String encryptedInputPassword = PasswordEncryptor.hashPassword(password);
+            NormalUser freshUser = freshLoginInfo.get(username);
 
-            if (user.getPassword().equals(encryptedInputPassword)) {
-                System.out.println("✅ Login successful! Welcome, " + username + "!");
+            if (freshUser.getPassword().equals(encryptedInputPassword)) {
+                loginPage.setLoginInfo(freshLoginInfo); // ensure LoginPage has fresh data
+                loginPage.setCurrentUser(freshUser);
                 loginPage.setLoggedIn(true);
-                loginPage.setCurrentUser(user);
+                System.out.println("✅ Login successful! Welcome, " + freshUser.getUsername() + "!");
             } else {
                 System.out.println("❌ Incorrect password. Please try again.");
             }
