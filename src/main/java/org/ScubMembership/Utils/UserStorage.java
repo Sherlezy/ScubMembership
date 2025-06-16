@@ -24,10 +24,15 @@ public class UserStorage {
     @SuppressWarnings("unchecked")
     public static HashMap<String, NormalUser> loadUsers() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))) {
-            return (HashMap<String, NormalUser>) in.readObject();
+            Object obj = in.readObject();
+            if(obj instanceof HashMap) {
+                return (HashMap<String, NormalUser>) obj;
+            } else {
+                System.out.println("❌ Invalid data format: expected HashMap but got " + obj.getClass().getSimpleName());
+            }
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("⚠️ No existing user data found. Starting fresh.");
-            return new HashMap<>();
         }
+        return new HashMap<>();
     }
 }
