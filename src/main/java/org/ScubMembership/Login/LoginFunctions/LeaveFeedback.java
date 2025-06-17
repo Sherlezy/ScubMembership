@@ -6,6 +6,7 @@ import org.ScubMembership.SportActivity.Feedback;
 import org.ScubMembership.SportActivity.SportEvent;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,14 +21,27 @@ public class LeaveFeedback {
                 .filter(event -> event.getDateTime().isBefore(LocalDateTime.now()))
                 .toList();
 
+        List<SportEvent> notYetReviewed = new ArrayList<>();
+
         if(attendedEvents.isEmpty()) {
             System.out.println("⚠\uFE0F You haven't participated in any events yet.");
             return;
         }
 
-        System.out.println("\uD83D\uDCCB Events you've attended: ");
-        for(int i = 0; i < attendedEvents.size(); i++) {
-            System.out.println((i+1) + ". " + attendedEvents.get(i));
+        for(SportEvent event : attendedEvents) {
+            if(!event.hasFeedbackFrom(loginPage.getCurrentUser().getUsername())) {
+                notYetReviewed.add(event);
+            }
+        }
+
+        if(notYetReviewed.isEmpty()) {
+            System.out.println("✅ You've reviewed all events you've attended!");
+            return;
+        }
+
+        System.out.println("\uD83D\uDCCB Events you haven't reviewed yet: ");
+        for(int i = 0; i < notYetReviewed.size(); i++) {
+            System.out.println((i+1) + ". " + notYetReviewed.get(i));
         }
 
         System.out.print("Select the event number you want to review: ");
@@ -44,15 +58,7 @@ public class LeaveFeedback {
             return;
         }
 
-        SportEvent selectedEvent = allEvents.get(eventIndex);
-
-        boolean alreadyLeftFeedback = selectedEvent.getFeedbackList().stream()
-                .anyMatch(f -> f.getUsername().equals(currentUser));
-
-        if (alreadyLeftFeedback) {
-            System.out.println("⚠️ You’ve already left feedback for this event.");
-            return;
-        }
+        SportEvent selectedEvent = notYetReviewed.get(eventIndex);
 
         System.out.print("Enter rating (1-5): ");
         double rating;
