@@ -98,7 +98,7 @@ public class EventManager {
         saveEvents();
     }
 
-    private static void saveEvents() {
+    public static void saveEvents() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
             out.writeObject(events);
         } catch (IOException e) {
@@ -116,5 +116,11 @@ public class EventManager {
             System.out.println("⚠️ Could not load saved events.");
             return new ArrayList<>();
         }
+    }
+
+    public static void reloadEvents() {
+        List<SportEvent> reloaded = loadEvents();
+        events.clear();
+        events.addAll(reloaded);
     }
 }
