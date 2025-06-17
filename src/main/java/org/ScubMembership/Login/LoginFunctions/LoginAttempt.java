@@ -4,6 +4,7 @@ import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.Users.NormalUser.NormalUser;
 import org.ScubMembership.PasswordSecurity.PasswordEncryptor;
 import org.ScubMembership.Utils.UserStorage;
+import org.ScubMembership.SportActivity.EventManager;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -21,6 +22,8 @@ public class LoginAttempt {
         // ❗️RELOAD USER DATA from disk
         HashMap<String, NormalUser> freshLoginInfo = UserStorage.loadUsers();
         loginPage.setLoginInfo(freshLoginInfo);  // update loginPage to hold latest user map
+
+        EventManager.reloadEvents();
 
         System.out.print("Username: ");
         String username = scanner.nextLine();

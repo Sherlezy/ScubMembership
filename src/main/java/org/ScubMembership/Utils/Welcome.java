@@ -7,6 +7,7 @@ import org.ScubMembership.Login.LoginFunctions.LoginMenu;
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.PasswordSecurity.PasswordEncryptor;
 import org.ScubMembership.Registration.RegistrationProcess;
+import org.ScubMembership.SportActivity.EventManager;
 import org.ScubMembership.Users.Admin.Admin;
 import org.ScubMembership.Users.NormalUser.NormalUser;
 
@@ -40,6 +41,7 @@ public class Welcome {
                     if (adminInfo.containsKey(username) && adminInfo.get(username).getPassword().equals(password)) {
                         System.out.println("👑 Admin login successful!");
                         Admin admin = adminInfo.get(username);
+                        EventManager.reloadEvents();
                         AdminMenu.show(admin);
                         running = false;
                     } else if (loginInfo.containsKey(username) && loginInfo.get(username).getPassword().equals(hashedInputPassword)) {
@@ -47,6 +49,7 @@ public class Welcome {
                         NormalUser user = loginInfo.get(username);
                         loginPage.setCurrentUser(user);
                         loginPage.setLoggedIn(true);
+                        EventManager.reloadEvents();
                         LoginMenu userMenu = new LoginMenu(loginPage);
                         userMenu.showLoginMenu();
                         running = false;
