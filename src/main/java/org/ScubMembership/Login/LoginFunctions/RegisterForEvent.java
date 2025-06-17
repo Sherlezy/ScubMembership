@@ -55,6 +55,7 @@ public class RegisterForEvent {
 
             boolean registered = selectedEvent.registerUser(username);
             if (registered) {
+                EventManager.saveEvents();
                 System.out.println("✅ You have been registered for this event.");
             } else {
                 System.out.println("❌ Sorry! This event is full. No more spots available.");

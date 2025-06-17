@@ -46,6 +46,14 @@ public class LeaveFeedback {
 
         SportEvent selectedEvent = allEvents.get(eventIndex);
 
+        boolean alreadyLeftFeedback = selectedEvent.getFeedbackList().stream()
+                .anyMatch(f -> f.getUsername().equals(currentUser));
+
+        if (alreadyLeftFeedback) {
+            System.out.println("⚠️ You’ve already left feedback for this event.");
+            return;
+        }
+
         System.out.print("Enter rating (1-5): ");
         double rating;
         try {
@@ -65,6 +73,7 @@ public class LeaveFeedback {
 
         Feedback feedback = new Feedback(currentUser, rating, comment);
         selectedEvent.addFeedback(feedback);
+        EventManager.saveEvents();
 
         System.out.println("✅ Feedback submitted. Thank you!");
     }
