@@ -2,6 +2,7 @@ package org.ScubMembership.SportActivity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class SportEvent implements Serializable {
     private int maxParticipants;
     private List<String> registeredUsers = new ArrayList<>();
     private List<Feedback> feedbackList = new ArrayList<>();
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public SportEvent(abs_sport sport, LocalDateTime dateTime, int maxParticipants) {
         this.sport = sport;
@@ -68,9 +70,19 @@ public class SportEvent implements Serializable {
         return Math.round(average * 10.0) / 10.0;
     }
 
+    public boolean hasFeedbackFrom(String username) {
+        for (Feedback f : feedbackList) {
+            if (f.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     @Override
     public String toString() {
-        return "Event for " + sport.getName() + " on " + dateTime + " (Max " + maxParticipants + ", Registered: " +
+        return "Event for " + sport.getName() + " on " + dateTime.format(formatter) + " (Max " + maxParticipants + ", Registered: " +
                 registeredUsers.size() + ")";
     }
 }
