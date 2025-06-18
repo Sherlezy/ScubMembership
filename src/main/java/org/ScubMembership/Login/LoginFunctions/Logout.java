@@ -12,28 +12,32 @@ import java.util.HashMap;
 public class Logout {
     private final LoginPage loginPage;
 
-    public Logout(LoginPage loginPage){
+    public Logout(LoginPage loginPage) {
         this.loginPage = loginPage;
     }
 
-    public void startLogout(){
+    public void startLogout() {
         System.out.println("Logging out...");
 
-        // Save current user back to loginInfo
         NormalUser currentUser = loginPage.getCurrentUser();
-        if (currentUser != null) {
-            loginPage.getLoginInfo().put(currentUser.getUsername(), currentUser);
+        HashMap<String, NormalUser> loginInfo = loginPage.getLoginInfo();
+
+       if (currentUser != null && loginInfo != null) {
+            loginInfo.put(currentUser.getUsername(), currentUser);
         }
 
-        // Save all users
-        UserStorage.saveUsers(loginPage.getLoginInfo());
+        try {
+            UserStorage.saveUsers(loginInfo);
+        } catch (Exception e) {
+            System.err.println("Failed to save users: " + e.getMessage());
+        }
 
-        // Log out
         loginPage.setCurrentUser(null);
         loginPage.setLoggedIn(false);
 
         System.out.println("Logged out successfully!");
+
         HashMap<String, Admin> adminInfo = AdminStorage.loadAdmins();
-        Welcome.welcome(loginPage.getLoginInfo(), adminInfo);
+        Welcome.welcome(loginInfo, adminInfo);
     }
 }
