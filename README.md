@@ -133,7 +133,7 @@ Each member committed using their own GitHub account, as required. We worked on 
 | Name                | GitHub Username |
 |---------------------|------------------|
 | Alessandro Ercolani | @Sherlezy        |
-| Andrea Ziccarelli   | @Z1CC4           |
+| Andrea Zicarelli   | @Z1CC4           |
 | Alessio Stroppari   | @Alessio Stroppari |
 
 
