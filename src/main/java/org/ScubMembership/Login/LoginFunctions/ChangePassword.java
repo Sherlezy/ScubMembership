@@ -31,13 +31,21 @@ public class ChangePassword {
             System.out.print("Confirm new password: ");
             String confirmPassword = scanner.nextLine();
 
+            if (newPassword.trim().isEmpty()) {
+                System.out.println("Password cannot be empty or whitespace. No changes made.");
+                return;
+            }
+
             if (newPassword.equals(confirmPassword)) {
                 currentUser.setPassword(PasswordEncryptor.hashPassword(newPassword));
                 UserStorage.saveUsers(loginInfo);
-                System.out.println("Password changed successfully!");
-
-            } else System.out.println("Passwords do not match. No changes made.");
-        } else System.out.println("Incorrect current password. No changes made.");
+                System.out.println("✅ Password changed successfully!");
+            } else {
+                System.out.println("Passwords do not match. No changes made.");
+            }
+        } else {
+            System.out.println("Incorrect current password. No changes made.");
+        }
     }
 
 

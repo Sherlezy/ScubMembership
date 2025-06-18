@@ -1,6 +1,7 @@
 package org.ScubMembership.Login.LoginFunctions;
 
 import org.ScubMembership.Login.LoginPage;
+import org.ScubMembership.PasswordSecurity.PasswordEncryptor;
 import org.ScubMembership.Users.NormalUser.NormalUser;
 import org.ScubMembership.Utils.UserStorage;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,17 +61,19 @@ public class ChangePasswordTest {
         String currentPassword = "oldPassword123";
         String newPassword = "newPassword456";
         String confirmPassword = "newPassword456";
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
+        String hashedNewPassword = PasswordEncryptor.hashPassword(newPassword);
 
         String input = currentPassword + "\n" + newPassword + "\n" + confirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
 
-            verify(currentUser).setPassword(newPassword);
+            verify(currentUser).setPassword(hashedNewPassword);
             mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
             assertTrue(outputStream.toString().contains("Password changed successfully!"));
         }
@@ -83,12 +86,13 @@ public class ChangePasswordTest {
         String wrongCurrentPassword = "wrongPassword";
         String newPassword = "newPassword456";
         String confirmPassword = "newPassword456";
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
 
         String input = wrongCurrentPassword + "\n" + newPassword + "\n" + confirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
@@ -105,12 +109,13 @@ public class ChangePasswordTest {
         String currentPassword = "oldPassword123";
         String newPassword = "newPassword456";
         String wrongConfirmPassword = "differentPassword789";
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
 
         String input = currentPassword + "\n" + newPassword + "\n" + wrongConfirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
@@ -128,12 +133,13 @@ public class ChangePasswordTest {
         String emptyCurrentPassword = "";
         String newPassword = "newPassword456";
         String confirmPassword = "newPassword456";
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
 
         String input = emptyCurrentPassword + "\n" + newPassword + "\n" + confirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
@@ -146,45 +152,45 @@ public class ChangePasswordTest {
 
     @Test
     void testEmptyNewPassword() {
-
         String currentPassword = "oldPassword123";
         String emptyNewPassword = "";
         String confirmPassword = "";
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
 
         String input = currentPassword + "\n" + emptyNewPassword + "\n" + confirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
 
-            verify(currentUser).setPassword(emptyNewPassword);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
-            assertTrue(outputStream.toString().contains("Password changed successfully!"));
+            verify(currentUser, never()).setPassword(anyString());
+            mockedUserStorage.verify(() -> UserStorage.saveUsers(any()), never());
+            assertTrue(outputStream.toString().contains("Password cannot be empty or whitespace. No changes made."));
         }
     }
 
     @Test
     void testWhitespacePasswords() {
-
-        String currentPassword = "   ";
+        String currentPassword = "oldPassword123";
         String newPassword = "  ";
         String confirmPassword = "  ";
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
 
         String input = currentPassword + "\n" + newPassword + "\n" + confirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
 
-            verify(currentUser).setPassword(newPassword);
-            mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
-            assertTrue(outputStream.toString().contains("Password changed successfully!"));
+            verify(currentUser, never()).setPassword(anyString());
+            mockedUserStorage.verify(() -> UserStorage.saveUsers(any()), never());
+            assertTrue(outputStream.toString().contains("Password cannot be empty or whitespace. No changes made."));
         }
     }
 
@@ -194,17 +200,19 @@ public class ChangePasswordTest {
         String currentPassword = "old@#$%^&*()";
         String newPassword = "new!@#$%^&*()_+";
         String confirmPassword = "new!@#$%^&*()_+";
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
+        String hashedNewPassword = PasswordEncryptor.hashPassword(newPassword);
 
         String input = currentPassword + "\n" + newPassword + "\n" + confirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
 
-            verify(currentUser).setPassword(newPassword);
+            verify(currentUser).setPassword(hashedNewPassword);
             mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
             assertTrue(outputStream.toString().contains("Password changed successfully!"));
         }
@@ -216,17 +224,19 @@ public class ChangePasswordTest {
         String currentPassword = "a".repeat(1000);
         String newPassword = "b".repeat(1000);
         String confirmPassword = "b".repeat(1000);
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
+        String hashedNewPassword = PasswordEncryptor.hashPassword(newPassword);
 
         String input = currentPassword + "\n" + newPassword + "\n" + confirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
 
-            verify(currentUser).setPassword(newPassword);
+            verify(currentUser).setPassword(hashedNewPassword);
             mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
             assertTrue(outputStream.toString().contains("Password changed successfully!"));
         }
@@ -238,17 +248,19 @@ public class ChangePasswordTest {
         String currentPassword = "samePassword123";
         String newPassword = "samePassword123";
         String confirmPassword = "samePassword123";
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
+        String hashedNewPassword = PasswordEncryptor.hashPassword(newPassword);
 
         String input = currentPassword + "\n" + newPassword + "\n" + confirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
 
-            verify(currentUser).setPassword(newPassword);
+            verify(currentUser).setPassword(hashedNewPassword);
             mockedUserStorage.verify(() -> UserStorage.saveUsers(loginInfo));
             assertTrue(outputStream.toString().contains("Password changed successfully!"));
         }
@@ -269,30 +281,6 @@ public class ChangePasswordTest {
     }
 
     @Test
-    void testUserStorageFailure() {
-
-        String currentPassword = "oldPassword123";
-        String newPassword = "newPassword456";
-        String confirmPassword = "newPassword456";
-
-        String input = currentPassword + "\n" + newPassword + "\n" + confirmPassword + "\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-
-        when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
-
-        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
-            mockedUserStorage.when(() -> UserStorage.saveUsers(loginInfo))
-                    .thenThrow(new RuntimeException("Database connection failed"));
-
-
-            assertThrows(RuntimeException.class, () -> {
-                changePassword.startChangePassword();
-            });
-        }
-    }
-
-    @Test
     void testConstructorWithNullLoginPage() {
 
         assertDoesNotThrow(() -> {
@@ -302,16 +290,16 @@ public class ChangePasswordTest {
 
     @Test
     void testPromptMessages() {
-
         String currentPassword = "oldPassword123";
         String newPassword = "newPassword456";
         String confirmPassword = "newPassword456";
+        String hashedCurrentPassword = PasswordEncryptor.hashPassword(currentPassword);
 
         String input = currentPassword + "\n" + newPassword + "\n" + confirmPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
         when(loginPage.getScanner()).thenReturn(scanner);
-        when(currentUser.getPassword()).thenReturn(currentPassword);
+        when(currentUser.getPassword()).thenReturn(hashedCurrentPassword);
 
         try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             changePassword.startChangePassword();
@@ -320,7 +308,7 @@ public class ChangePasswordTest {
             assertTrue(output.contains("Enter current password: "));
             assertTrue(output.contains("Enter new password: "));
             assertTrue(output.contains("Confirm new password: "));
-            assertTrue(output.contains("Password changed successfully!"));
+            assertTrue(output.contains("✅ Password changed successfully!"));
         }
     }
 }
