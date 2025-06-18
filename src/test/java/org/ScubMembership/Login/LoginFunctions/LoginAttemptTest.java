@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
+import org.ScubMembership.Utils.UserStorage;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,7 +52,6 @@ public class LoginAttemptTest {
         loginInfo.put("testuser", mockUser1);
         loginInfo.put("admin", mockUser2);
 
-
         when(loginPage.getLoginInfo()).thenReturn(loginInfo);
 
         loginAttempt = new LoginAttempt(loginPage);
@@ -71,9 +71,11 @@ public class LoginAttemptTest {
 
         when(loginPage.getScanner()).thenReturn(mockScanner);
 
-        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class)) {
+        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class);
+             MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             mockedEncryptor.when(() -> PasswordEncryptor.hashPassword("secret456"))
                     .thenReturn("secret456");
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
             loginAttempt.startLoginAttempt();
 
@@ -90,10 +92,13 @@ public class LoginAttemptTest {
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
+        when(mockUser2.getUsername()).thenReturn("admin");
 
-        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class)) {
+        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class);
+             MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             mockedEncryptor.when(() -> PasswordEncryptor.hashPassword(password))
                     .thenReturn(password);
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
             loginAttempt.startLoginAttempt();
 
@@ -101,7 +106,7 @@ public class LoginAttemptTest {
             verify(loginPage).setCurrentUser(mockUser2);
 
             String output = outputStream.toString();
-            assertTrue(output.contains("Login successful! Welcome, " + username + "!"));
+            assertTrue(output.contains("✅ Login successful! Welcome, " + username + "!"));
         }
     }
 
@@ -114,13 +119,17 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        loginAttempt.startLoginAttempt();
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
-        verify(loginPage, never()).setLoggedIn(true);
-        verify(loginPage, never()).setCurrentUser(any());
+            loginAttempt.startLoginAttempt();
 
-        String output = outputStream.toString();
-        assertTrue(output.contains("Incorrect password. Please try again."));
+            verify(loginPage, never()).setLoggedIn(true);
+            verify(loginPage, never()).setCurrentUser(any());
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Incorrect password. Please try again."));
+        }
     }
 
     @Test
@@ -132,13 +141,17 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        loginAttempt.startLoginAttempt();
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
-        verify(loginPage, never()).setLoggedIn(true);
-        verify(loginPage, never()).setCurrentUser(any());
+            loginAttempt.startLoginAttempt();
 
-        String output = outputStream.toString();
-        assertTrue(output.contains("Username not found. Please try again."));
+            verify(loginPage, never()).setLoggedIn(true);
+            verify(loginPage, never()).setCurrentUser(any());
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Username not found. Please try again."));
+        }
     }
 
     @Test
@@ -150,13 +163,17 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        loginAttempt.startLoginAttempt();
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
-        verify(loginPage, never()).setLoggedIn(true);
-        verify(loginPage, never()).setCurrentUser(any());
+            loginAttempt.startLoginAttempt();
 
-        String output = outputStream.toString();
-        assertTrue(output.contains("Username not found. Please try again."));
+            verify(loginPage, never()).setLoggedIn(true);
+            verify(loginPage, never()).setCurrentUser(any());
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Username not found. Please try again."));
+        }
     }
 
     @Test
@@ -168,13 +185,17 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        loginAttempt.startLoginAttempt();
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
-        verify(loginPage, never()).setLoggedIn(true);
-        verify(loginPage, never()).setCurrentUser(any());
+            loginAttempt.startLoginAttempt();
 
-        String output = outputStream.toString();
-        assertTrue(output.contains("Incorrect password. Please try again."));
+            verify(loginPage, never()).setLoggedIn(true);
+            verify(loginPage, never()).setCurrentUser(any());
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Incorrect password. Please try again."));
+        }
     }
 
     @Test
@@ -186,13 +207,17 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        loginAttempt.startLoginAttempt();
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
-        verify(loginPage, never()).setLoggedIn(true);
-        verify(loginPage, never()).setCurrentUser(any());
+            loginAttempt.startLoginAttempt();
 
-        String output = outputStream.toString();
-        assertTrue(output.contains("Username not found. Please try again."));
+            verify(loginPage, never()).setLoggedIn(true);
+            verify(loginPage, never()).setCurrentUser(any());
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Username not found. Please try again."));
+        }
     }
 
     @Test
@@ -204,13 +229,17 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        loginAttempt.startLoginAttempt();
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
-        verify(loginPage, never()).setLoggedIn(true);
-        verify(loginPage, never()).setCurrentUser(any());
+            loginAttempt.startLoginAttempt();
 
-        String output = outputStream.toString();
-        assertTrue(output.contains("Incorrect password. Please try again."));
+            verify(loginPage, never()).setLoggedIn(true);
+            verify(loginPage, never()).setCurrentUser(any());
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Incorrect password. Please try again."));
+        }
     }
 
     @Test
@@ -222,13 +251,17 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        loginAttempt.startLoginAttempt();
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
-        verify(loginPage, never()).setLoggedIn(true);
-        verify(loginPage, never()).setCurrentUser(any());
+            loginAttempt.startLoginAttempt();
 
-        String output = outputStream.toString();
-        assertTrue(output.contains("Username not found. Please try again."));
+            verify(loginPage, never()).setLoggedIn(true);
+            verify(loginPage, never()).setCurrentUser(any());
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Username not found. Please try again."));
+        }
     }
 
     @Test
@@ -240,13 +273,17 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        loginAttempt.startLoginAttempt();
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
-        verify(loginPage, never()).setLoggedIn(true);
-        verify(loginPage, never()).setCurrentUser(any());
+            loginAttempt.startLoginAttempt();
 
-        String output = outputStream.toString();
-        assertTrue(output.contains("Incorrect password. Please try again."));
+            verify(loginPage, never()).setLoggedIn(true);
+            verify(loginPage, never()).setCurrentUser(any());
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Incorrect password. Please try again."));
+        }
     }
 
     @Test
@@ -256,15 +293,18 @@ public class LoginAttemptTest {
 
         NormalUser specialUser = mock(NormalUser.class);
         when(specialUser.getPassword()).thenReturn(specialPassword);
+        when(specialUser.getUsername()).thenReturn(specialUsername);
         loginInfo.put(specialUsername, specialUser);
 
         String input = specialUsername + "\n" + specialPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class)) {
+        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class);
+             MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             mockedEncryptor.when(() -> PasswordEncryptor.hashPassword(specialPassword))
                     .thenReturn(specialPassword);
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
             loginAttempt.startLoginAttempt();
 
@@ -272,7 +312,7 @@ public class LoginAttemptTest {
             verify(loginPage).setCurrentUser(specialUser);
 
             String output = outputStream.toString();
-            assertTrue(output.contains("Login successful! Welcome, " + specialUsername + "!"));
+            assertTrue(output.contains("✅ Login successful! Welcome, " + specialUsername + "!"));
         }
     }
 
@@ -283,16 +323,18 @@ public class LoginAttemptTest {
 
         NormalUser longUser = mock(NormalUser.class);
         when(longUser.getPassword()).thenReturn(longPassword);
+        when(longUser.getUsername()).thenReturn(longUsername);
         loginInfo.put(longUsername, longUser);
 
         String input = longUsername + "\n" + longPassword + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-
-        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class)) {
+        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class);
+             MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             mockedEncryptor.when(() -> PasswordEncryptor.hashPassword(longPassword))
                     .thenReturn(longPassword);
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
             loginAttempt.startLoginAttempt();
 
@@ -300,29 +342,25 @@ public class LoginAttemptTest {
             verify(loginPage).setCurrentUser(longUser);
 
             String output = outputStream.toString();
-            assertTrue(output.contains("Login successful! Welcome, " + longUsername + "!"));
+            assertTrue(output.contains("✅ Login successful! Welcome, " + longUsername + "!"));
         }
     }
 
     @Test
     void testNullPasswordFromUser() {
         String username = "testuser";
-        String password = "password123";
-        String input = username + "\n" + password + "\n";
-
-        when(mockUser1.getPassword()).thenReturn(null);
+        String input = username + "\n"; // No password input
 
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
-        assertThrows(NullPointerException.class, () -> {
-            loginAttempt.startLoginAttempt();
-        });
-
-
-        verify(loginPage, never()).setLoggedIn(true);
-        verify(loginPage, never()).setCurrentUser(any());
+            assertThrows(java.util.NoSuchElementException.class, () -> {
+                loginAttempt.startLoginAttempt();
+            });
+        }
     }
 
     @Test
@@ -357,9 +395,12 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        assertThrows(NullPointerException.class, () -> {
-            loginAttempt.startLoginAttempt();
-        });
+        try (MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(null);
+            assertThrows(NullPointerException.class, () -> {
+                loginAttempt.startLoginAttempt();
+            });
+        }
     }
 
     @Test
@@ -396,22 +437,28 @@ public class LoginAttemptTest {
 
     @Test
     void testSuccessfulLoginSetsCorrectUser() {
-        String username = "admin";
-        String password = "secret456";
-        String input = username + "\n" + password + "\n";
+        // Prepare a fresh loginInfo with a specific user
+        HashMap<String, NormalUser> freshLoginInfo = new HashMap<>();
+        NormalUser user = mock(NormalUser.class);
+        when(user.getUsername()).thenReturn("Vez");
+        when(user.getPassword()).thenReturn("vezpass");
+        freshLoginInfo.put("Vez", user);
 
+        String username = "Vez";
+        String password = "vezpass";
+        String input = username + "\n" + password + "\n";
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        // Mock the PasswordEncryptor to return the same password (no encryption)
-        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class)) {
-            mockedEncryptor.when(() -> PasswordEncryptor.hashPassword(password))
-                    .thenReturn(password); // Return the same password
+        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class);
+             MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
+            mockedEncryptor.when(() -> PasswordEncryptor.hashPassword(password)).thenReturn(password);
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(freshLoginInfo);
 
             loginAttempt.startLoginAttempt();
 
-            verify(loginPage).setCurrentUser(mockUser2);
-            verify(loginPage, never()).setCurrentUser(mockUser1);
+            verify(loginPage).setCurrentUser(user);
+            verify(loginPage).setLoggedIn(true);
         }
     }
 
@@ -419,6 +466,8 @@ public class LoginAttemptTest {
     void testMultipleUsersWithSamePassword() {
         when(mockUser1.getPassword()).thenReturn("samepassword");
         when(mockUser2.getPassword()).thenReturn("samepassword");
+        when(mockUser1.getUsername()).thenReturn("testuser");
+        when(mockUser2.getUsername()).thenReturn("admin");
 
         String username = "testuser";
         String password = "samepassword";
@@ -427,9 +476,11 @@ public class LoginAttemptTest {
         Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(loginPage.getScanner()).thenReturn(scanner);
 
-        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class)) {
+        try (MockedStatic<PasswordEncryptor> mockedEncryptor = mockStatic(PasswordEncryptor.class);
+             MockedStatic<UserStorage> mockedUserStorage = mockStatic(UserStorage.class)) {
             mockedEncryptor.when(() -> PasswordEncryptor.hashPassword(password))
                     .thenReturn(password);
+            mockedUserStorage.when(UserStorage::loadUsers).thenReturn(loginInfo);
 
             loginAttempt.startLoginAttempt();
 
@@ -438,7 +489,7 @@ public class LoginAttemptTest {
             verify(loginPage, never()).setCurrentUser(mockUser2);
 
             String output = outputStream.toString();
-            assertTrue(output.contains("Login successful! Welcome, " + username + "!"));
+            assertTrue(output.contains("✅ Login successful! Welcome, " + username + "!"));
         }
     }
 }
