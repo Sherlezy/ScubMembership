@@ -1,3 +1,6 @@
+![Build](https://github.com/Sherlezy/ScubMembership/actions/workflows/ci.yml/badge.svg)
+
+
 # ScubMembership 🏊‍♂️📅
 
 ## Table of Contents
