@@ -19,9 +19,8 @@ public class LoginAttempt {
     public void startLoginAttempt() {
         Scanner scanner = loginPage.getScanner();
 
-        // ❗️RELOAD USER DATA from disk
         HashMap<String, NormalUser> freshLoginInfo = UserStorage.loadUsers();
-        loginPage.setLoginInfo(freshLoginInfo);  // update loginPage to hold latest user map
+        loginPage.setLoginInfo(freshLoginInfo);
 
         EventManager.reloadEvents();
 

@@ -42,7 +42,7 @@ public class Welcome {
                         System.out.println("👑 Admin login successful!");
                         Admin admin = adminInfo.get(username);
                         EventManager.reloadEvents();
-                        AdminMenu.show(admin);
+                        AdminMenu.show(admin, loginPage);
                         running = false;
                     } else if (loginInfo.containsKey(username) && loginInfo.get(username).getPassword().equals(hashedInputPassword)) {
                         System.out.println("✅ User login successful!");
