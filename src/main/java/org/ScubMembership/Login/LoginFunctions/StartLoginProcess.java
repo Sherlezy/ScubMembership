@@ -32,7 +32,7 @@ public class StartLoginProcess {
                     break;
                 case "2":
                     System.out.println("Exiting system. Goodbye!");
-                    return;
+                    System.exit(0);
                 default:
                     System.out.println("Invalid option. Please try again.");
             }

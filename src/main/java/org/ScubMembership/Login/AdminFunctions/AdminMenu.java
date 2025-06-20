@@ -1,5 +1,7 @@
 package org.ScubMembership.Login.AdminFunctions;
 
+import org.ScubMembership.Login.LoginFunctions.StartLoginProcess;
+import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.QuizzSystem.QuizQuestion;
 import org.ScubMembership.SportActivity.Basketball.Basketball;
 import org.ScubMembership.SportActivity.Climbing.Climbing;
@@ -23,10 +25,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
-    public static void show(Admin admin) {
+    public static void show(Admin admin, LoginPage loginPage) {
         Scanner scanner = new Scanner(System.in);
         HashMap<String, Admin> admins = AdminStorage.loadAdmins();
         ArrayList<abs_sport> sports = new ArrayList<>();
+
 
         sports.add(new Basketball());
         sports.add(new Football());
@@ -62,6 +65,8 @@ public class AdminMenu {
                     RegisterNewAdmin.execute(scanner);
                     break;
                 case "3":
+                    StartLoginProcess process = new StartLoginProcess(loginPage);
+                    process.startLoginProcess();
                     running = false;
                     break;
                 case "4":
