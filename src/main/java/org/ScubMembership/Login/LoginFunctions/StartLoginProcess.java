@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class StartLoginProcess {
 
    private LoginPage loginPage;
+   public static boolean isTestMode = false;
 
    public StartLoginProcess(LoginPage loginPage){
        this.loginPage = loginPage;
@@ -32,7 +33,11 @@ public class StartLoginProcess {
                     break;
                 case "2":
                     System.out.println("Exiting system. Goodbye!");
-                    System.exit(0);
+                    if (isTestMode) {
+                        throw new RuntimeException("Exit called");
+                    } else {
+                        System.exit(0);
+                    }
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
