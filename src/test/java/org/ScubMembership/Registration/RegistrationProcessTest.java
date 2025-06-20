@@ -11,6 +11,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
+import org.ScubMembership.Login.LoginFunctions.StartLoginProcess;
+import static org.ScubMembership.SportActivity.SportRegistry.SPORTS;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,6 +53,7 @@ public class RegistrationProcessTest {
 
         emailValidatorMockedStatic = mockStatic(EmailValidator.class);
         userStorageMockedStatic = mockStatic(UserStorage.class);
+        StartLoginProcess.isTestMode = true;
     }
 
     @AfterEach
@@ -58,11 +61,12 @@ public class RegistrationProcessTest {
         System.setOut(originalOut);
         if (emailValidatorMockedStatic != null) emailValidatorMockedStatic.close();
         if (userStorageMockedStatic != null) userStorageMockedStatic.close();
+        StartLoginProcess.isTestMode = false;
     }
 
     @Test
     void testSuccessfulRegistration() {
-        String input = "test@example.com\ntestuser\nTestPass123!\n1\n3\n2";
+        String input = "test@example.com\ntestuser\nTestPass123!\n1\n3\n2\n2\n";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -71,7 +75,7 @@ public class RegistrationProcessTest {
 
         registrationProcess = new RegistrationProcess(mockLoginPage);
 
-        registrationProcess.startRegistration();
+        assertThrows(RuntimeException.class, () -> registrationProcess.startRegistration());
 
         assertEquals(1, loginInfo.size());
         assertTrue(loginInfo.containsKey("testuser"));
@@ -80,7 +84,7 @@ public class RegistrationProcessTest {
         assertEquals("test@example.com", registeredUser.getEmail());
         assertEquals("testuser", registeredUser.getUsername());
         assertEquals(1, registeredUser.getID());
-        assertEquals("Tennis", registeredUser.getPreferredSport());
+        assertEquals(SPORTS.get(0).getName(), registeredUser.getPreferredSport());
 
         assertEquals(1, registrationProcess.getRegisteredUsers().size());
 
@@ -94,7 +98,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithInvalidEmailThenValid(){
-        String input = "invalid-email\nvalid@example.com\ntestuser\nTestPass123!\n2\n3\n2";
+        String input = "invalid-email\nvalid@example.com\ntestuser\nTestPass123!\n1\n3\n2\n2\n";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -105,7 +109,7 @@ public class RegistrationProcessTest {
 
         registrationProcess = new RegistrationProcess(mockLoginPage);
 
-        registrationProcess.startRegistration();
+        assertThrows(RuntimeException.class, () -> registrationProcess.startRegistration());
 
         assertEquals(1, loginInfo.size());
         NormalUser registeredUser = loginInfo.get("testuser");
@@ -121,7 +125,7 @@ public class RegistrationProcessTest {
         NormalUser existingUser = new NormalUser("existing@example.com", "existinguser", "pass", 1, "Basketball", "Morning (08:00 - 12:00)");
         loginInfo.put("existinguser", existingUser);
 
-        String input = "existing@example.com\nnew@example.com\nnewuser\nTestPass123!\n3\n3\n2";
+        String input = "existing@example.com\nnew@example.com\nnewuser\nTestPass123!\n1\n3\n2\n2\n";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -130,13 +134,14 @@ public class RegistrationProcessTest {
 
         registrationProcess = new RegistrationProcess(mockLoginPage);
 
-        registrationProcess.startRegistration();
+        assertThrows(RuntimeException.class, () -> registrationProcess.startRegistration());
 
         assertEquals(2, loginInfo.size());
         assertTrue(loginInfo.containsKey("newuser"));
 
         NormalUser newUser = loginInfo.get("newuser");
         assertEquals("new@example.com", newUser.getEmail());
+        assertEquals(SPORTS.get(0).getName(), newUser.getPreferredSport());
         assertEquals(2, loginInfo.size());
 
         String output = outputStream.toString();
@@ -148,7 +153,7 @@ public class RegistrationProcessTest {
         NormalUser existingUser = new NormalUser("duplicate@example.com", "duplicateuser", "duplicatepass", 1, "Basketball", "Evening (17:00 - 21:00)" );
         loginInfo.put("duplicateuser", existingUser);
 
-        String input = "new@example.com\nduplicateuser\nnewuser\nTestPass123!\n4\n3\n2";
+        String input = "new@example.com\nduplicateuser\nnewuser\nTestPass123!\n1\n3\n2\n2\n";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -156,7 +161,7 @@ public class RegistrationProcessTest {
                 .thenReturn(true);
 
         registrationProcess = new RegistrationProcess(mockLoginPage);
-        registrationProcess.startRegistration();
+        assertThrows(RuntimeException.class, () -> registrationProcess.startRegistration());
 
         assertEquals(2, loginInfo.size());
         assertTrue(loginInfo.containsKey("newuser"));
@@ -170,7 +175,7 @@ public class RegistrationProcessTest {
         NormalUser existingUser = new NormalUser("EXISTING@EXAMPLE.COM", "existinguser", "pass", 1, "Basketball", "Afternoon (12:00 - 17:00)");
         loginInfo.put("existinguser", existingUser);
 
-        String input = "existing@example.com\nnew@example.com\nnewuser\nTestPass123!\n5\n3\n2";
+        String input = "existing@example.com\nnew@example.com\nnewuser\nTestPass123!\n1\n3\n2\n2\n";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -178,12 +183,13 @@ public class RegistrationProcessTest {
                 .thenReturn(true);
 
         RegistrationProcess registrationProcess = new RegistrationProcess(mockLoginPage);
-        registrationProcess.startRegistration();
+        assertThrows(RuntimeException.class, () -> registrationProcess.startRegistration());
 
         assertEquals(2, loginInfo.size());
 
         NormalUser newUser = loginInfo.get("newuser");
         assertEquals("new@example.com", newUser.getEmail());
+        assertEquals(SPORTS.get(0).getName(), newUser.getPreferredSport());
 
         String output = outputStream.toString();
         assertTrue(output.contains("An account with this email already exists."));
@@ -191,7 +197,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testRegistrationWithEmptyInputHandling() {
-        String input = "   valid@example.com   \n   testuser   \nTestPass123!\n6\n3\n2";
+        String input = "   valid@example.com   \n   testuser   \nTestPass123!\n1\n3\n2\n2\n";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -199,12 +205,13 @@ public class RegistrationProcessTest {
                 .thenReturn(true);
 
         registrationProcess = new RegistrationProcess(mockLoginPage);
-
-        registrationProcess.startRegistration();
+        assertThrows(RuntimeException.class, () -> registrationProcess.startRegistration());
 
         NormalUser registeredUser = loginInfo.get("testuser");
+        assertNotNull(registeredUser);
         assertEquals("valid@example.com", registeredUser.getEmail());
         assertEquals("testuser", registeredUser.getUsername());
+        assertEquals(SPORTS.get(0).getName(), registeredUser.getPreferredSport());
     }
 
     @Test
@@ -217,7 +224,7 @@ public class RegistrationProcessTest {
 
     @Test
     void testMultipleInvalidEmailsBeforeValid() {
-        String input = "bad1\nbad2\nbad3\ngood@example.com\ntester\nTestPass123!\n7\n3\n2";
+        String input = "bad1\nbad2\nbad3\ngood@example.com\ntester\nTestPass123!\n1\n3\n2\n2\n";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -232,11 +239,12 @@ public class RegistrationProcessTest {
 
         registrationProcess = new RegistrationProcess(mockLoginPage);
 
-        registrationProcess.startRegistration();
+        assertThrows(RuntimeException.class, () -> registrationProcess.startRegistration());
 
         assertEquals(1, loginInfo.size());
         NormalUser user = loginInfo.get("tester");
         assertEquals("good@example.com", user.getEmail());
+        assertEquals(SPORTS.get(0).getName(), user.getPreferredSport());
 
         String output = outputStream.toString();
         assertEquals(3, output.split("Your E-Mail address is invalid\\.").length - 1);
@@ -247,7 +255,7 @@ public class RegistrationProcessTest {
         loginInfo.put("taken1", new NormalUser("email1@example.com", "taken1", "pass", 1, "Sport", "Evening (17:00 - 21:00)"));
         loginInfo.put("taken2", new NormalUser("email2@example.com", "taken2", "pass", 2, "Sport", "Evening (17:00 - 21:00)"));
 
-        String input = "new@example.com\ntaken1\ntaken2\navailable\nTestPass123!\n8\n3\n2";
+        String input = "new@example.com\ntaken1\ntaken2\navailable\nTestPass123!\n1\n3\n2\n2\n";
         Scanner mockScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
         when(mockLoginPage.getScanner()).thenReturn(mockScanner);
 
@@ -256,7 +264,7 @@ public class RegistrationProcessTest {
 
         registrationProcess = new RegistrationProcess(mockLoginPage);
 
-        registrationProcess.startRegistration();
+        assertThrows(RuntimeException.class, () -> registrationProcess.startRegistration());
 
         assertEquals(3, loginInfo.size());
         assertTrue(loginInfo.containsKey("available"));
