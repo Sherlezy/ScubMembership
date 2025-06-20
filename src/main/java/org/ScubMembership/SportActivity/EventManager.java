@@ -113,7 +113,6 @@ public class EventManager {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             return (List<SportEvent>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("⚠️ Could not load saved events.");
             return new ArrayList<>();
         }
     }
