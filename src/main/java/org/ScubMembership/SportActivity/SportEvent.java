@@ -14,7 +14,6 @@ public class SportEvent implements Serializable {
     private int maxParticipants;
     private List<String> registeredUsers = new ArrayList<>();
     private List<Feedback> feedbackList = new ArrayList<>();
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public SportEvent(abs_sport sport, LocalDateTime dateTime, int maxParticipants) {
         this.sport = sport;
@@ -82,6 +81,7 @@ public class SportEvent implements Serializable {
 
     @Override
     public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return "Event for " + sport.getName() + " on " + dateTime.format(formatter) + " (Max " + maxParticipants + ", Registered: " +
                 registeredUsers.size() + ")";
     }
