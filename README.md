@@ -138,7 +138,7 @@ The code follows a layered, modular design organized into these packages:
 The team worked collaboratively using GitHub and IntelliJ IDEA. We split tasks by responsibility:
 
 - Alessandro: Chat system, password encryption, recommendation logic, quiz & leaderboard
-- Andrea: Admin system,
+- Andrea: Admin system, normal user system, registration & login system, tests
 - Alessio: Friends manager, event system
 
 ### Git Strategy
@@ -149,7 +149,8 @@ Each member committed using their own GitHub account, as required. We worked on 
 
 - Alessandro: Managing password hashing and validations without compromising testability, this was caused because i decided to add
   password hashing and validation after creating the first test cases and the first password logic.
-- Andrea:
+- Andrea: Creating the test and every time something changed, modify them accordingly. Most of all the password hashing was the most 
+  difficult part to consider when testing. 
 - Alessio:
 
 ## Group Members
