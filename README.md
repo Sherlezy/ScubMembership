@@ -135,7 +135,7 @@ The code follows a layered, modular design organized into these packages:
 
 ### Internal Organization
 
-The team worked collaboratively using GitHub and IntelliJ IDEA. We split tasks by responsibility:
+The team worked collaboratively using GitHub and IntelliJ IDEA. We initially used GitHub Issues to assign tasks and organize the work, but once we started coding, we each focused on different parts of the project, so everyone knew what to do. Throughout the process, we regularly confronted each other and worked together when needed.In addition, we set up a GitHub Actions pipeline to automate the build and testing process. This helped us detect errors early and ensure that our code remained functional as we integrated our changes.. We split tasks by responsibility:
 
 - Alessandro: Chat system, password encryption, recommendation logic, quiz & leaderboard
 - Andrea: Admin system, normal user system, registration & login system, tests
