@@ -25,7 +25,14 @@ ScubMembership is a Java-based console application designed to simulate a sports
 
 ## Usage
 
-Make sure you have Java 17+ and Maven installed.
+Make sure you have Java 17+ and Maven installed.### 🛠️ Starting the Chat Server
+
+To use the chat feature, you must first start the server to open a port for incoming connections.
+
+1. Run the `ChatServer` class located in `org.ScubMembership.ChatSystem`.
+2. The server will listen on port `12345`.
+3. **Keep the terminal open** while the server is running — closing it will terminate all chat connections.
+
 
 ### Build
 
