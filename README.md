@@ -139,7 +139,7 @@ The team worked collaboratively using GitHub and IntelliJ IDEA. We initially use
 
 - Alessandro: Chat system, password encryption, recommendation logic, quiz & leaderboard
 - Andrea: Admin system, normal user system, registration & login system, tests
-- Alessio: Friends manager, event system
+- Alessio: Friends manager with recommendation logic, event system, feedbacks, sports, some of the tests
 
 ### Git Strategy
 
@@ -151,7 +151,8 @@ Each member committed using their own GitHub account, as required. We worked on 
   password hashing and validation after creating the first test cases and the first password logic.
 - Andrea: Creating the test and every time something changed, modify them accordingly. Most of all the password hashing was the most 
   difficult part to consider when testing. 
-- Alessio:
+- Alessio: the main challenge was implementing everything regarding friends (in particular the recommendation logic) and its 
+  serialization, because I implemented it at the end and stumble in some errors that I needed to fix. 
 
 ## Group Members
 
