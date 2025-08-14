@@ -26,6 +26,8 @@ public class FriendRecommender {
 
             if(Objects.equals(currentUser.getPreferredSport(), candidate.getPreferredSport())) score += 5;
 
+            if(Objects.equals(currentUser.getPreferredTimeSlot(), candidate.getPreferredTimeSlot())) score += 3;
+
             Set<String> currentUserEvents = getAttendedEvents(currentUser);
             Set<String> candidateEvents = getAttendedEvents(candidate);
 

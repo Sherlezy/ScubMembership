@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import static org.ScubMembership.Friends.FriendRecommender.getRecommendedFriends;
+
 public class SendFriendRequestUI {
     private final LoginPage loginPage;
 
@@ -19,6 +21,7 @@ public class SendFriendRequestUI {
         Scanner scanner = loginPage.getScanner();
         HashMap<String, NormalUser> loginInfo = loginPage.getLoginInfo();
 
+        System.out.println();
         System.out.println("=== 🤝 Friend Request Menu ===");
         System.out.println("1. View Recommended Friends");
         System.out.println("2. Search by username");
@@ -34,7 +37,64 @@ public class SendFriendRequestUI {
 
         switch (choice) {
             case "1":
-                System.out.println("⚠️ No recommended friends at the moment."); // Stub or implement later
+                List<NormalUser> recommendedFriends = getRecommendedFriends(currentUser);
+                if(recommendedFriends.isEmpty()) {
+                    System.out.println("⚠️ No recommended friends at the moment.");
+                } else {
+                    System.out.println("🔍 Search result:");
+                    for (int i = 0; i < recommendedFriends.size(); i++) {
+                        NormalUser user = recommendedFriends.get(i);
+                        System.out.printf("%d. %s (Preferred Sport: %s)%n", i + 1, user.getUsername(), user.getPreferredSport());
+                    }
+                    System.out.print("Enter the number of the user to send a friend request (0 to cancel): ");
+                    String input = scanner.nextLine();
+
+                    int selected;
+                    try {
+                        selected = Integer.parseInt(input);
+                    } catch (NumberFormatException e) {
+                        System.out.println("❌ Invalid input.");
+                        return;
+                    }
+
+                    if (selected == 0) {
+                        System.out.println("Cancelled.");
+                        return;
+                    }
+                    if (selected < 1 || selected > recommendedFriends.size()) {
+                        System.out.println("❌ Invalid selection.");
+                        return;
+                    }
+
+                    NormalUser targetUser = recommendedFriends.get(selected - 1);
+
+                    if (currentUser.getFriends().contains(targetUser.getUsername())) {
+                        System.out.println("⚠️ You are already friends with " + targetUser.getUsername());
+                        return;
+                    }
+                    if (targetUser.getReceivedFriendRequest().contains(currentUser.getUsername())) {
+                        System.out.println("⚠️ Friend request already sent to " + targetUser.getUsername());
+                        return;
+                    }
+                    if (currentUser.getReceivedFriendRequest().contains(targetUser.getUsername())) {
+                        System.out.println("⚠️ You have a pending friend request from " + targetUser.getUsername() + ". Consider accepting it.");
+                        return;
+                    }
+
+                    // Add to targetUser receivedFriendRequests
+                    targetUser.getReceivedFriendRequest().add(currentUser.getUsername());
+                    // Add to currentUser sentFriendRequests if you track that list (optional)
+                    currentUser.getSentFriendRequest().add(targetUser.getUsername());
+
+                    // Put updated users back into loginInfo map
+                    loginInfo.put(currentUser.getUsername(), currentUser);
+                    loginInfo.put(targetUser.getUsername(), targetUser);
+
+                    // Save updated users
+                    UserStorage.saveUsers(loginInfo);
+
+                    System.out.println("✅ Friend request sent to " + targetUser.getUsername());
+                }
                 break;
 
             case "2":
