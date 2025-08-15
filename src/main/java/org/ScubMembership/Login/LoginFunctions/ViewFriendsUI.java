@@ -8,7 +8,7 @@ import java.util.*;
 public class ViewFriendsUI {
     public static void execute (LoginPage loginPage) {
         NormalUser currentUser = loginPage.getCurrentUser();
-        List<String> friends = currentUser.getFriends();
+        Set<String> friends = currentUser.getFriends();
 
         System.out.println("\n\uD83D\uDC65 Your friends: ");
         if(friends == null || friends.isEmpty()) {

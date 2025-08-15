@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class NormalUser implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -13,10 +15,10 @@ public class NormalUser implements Serializable {
     public String password;
     public int ID;
     public String preferredSport;
-    private String preferredTimeSlot;  // NEW FIELD
-    private List<String> friends = new ArrayList<>(); // NEW FIELD
-    private List<String> sentFriendRequest = new ArrayList<>(); // NEW FIELD
-    private List<String> receivedFriendRequest = new ArrayList<>(); // NEW FIELD
+    private String preferredTimeSlot;
+    private Set<String> friends = new HashSet<>();
+    private Set<String> sentFriendRequest = new HashSet<>();
+    private Set<String> receivedFriendRequest = new HashSet<>();
 
     public NormalUser(String email, String username, String password, int ID, String preferredSport, String preferredTimeSlot) {
         this.email = email;
@@ -35,18 +37,18 @@ public class NormalUser implements Serializable {
         this.preferredTimeSlot = preferredTimeSlot;
     }
 
-    public List<String> getFriends() {
-        if(friends == null) friends = new ArrayList<>();
+    public Set<String> getFriends() {
+        if(friends == null) friends = new HashSet<>();
         return friends;
     }
 
-    public List<String> getSentFriendRequest() {
-        if(sentFriendRequest == null) sentFriendRequest = new ArrayList<>();
+    public Set<String> getSentFriendRequest() {
+        if(sentFriendRequest == null) sentFriendRequest = new HashSet<>();
         return sentFriendRequest;
     }
 
-    public List<String> getReceivedFriendRequest() {
-        if(receivedFriendRequest == null) receivedFriendRequest = new ArrayList<>();
+    public Set<String> getReceivedFriendRequest() {
+        if(receivedFriendRequest == null) receivedFriendRequest = new HashSet<>();
         return receivedFriendRequest;
     }
 
@@ -120,8 +122,8 @@ public class NormalUser implements Serializable {
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        if(friends == null) friends = new ArrayList<>();
-        if(sentFriendRequest == null) sentFriendRequest = new ArrayList<>();
-        if(receivedFriendRequest == null) receivedFriendRequest = new ArrayList<>();
+        if(friends == null) friends = new HashSet<>();
+        if(sentFriendRequest == null) sentFriendRequest = new HashSet<>();
+        if(receivedFriendRequest == null) receivedFriendRequest = new HashSet<>();
     }
 }

@@ -47,37 +47,4 @@ public class FriendsMenuUI {
             }
         }
     }
-
-    private static void viewFriends() {
-        var currentUser = loginPage.getCurrentUser();
-        if (currentUser.getFriends().isEmpty()) {
-            System.out.println("⚠️ You have no friends added.");
-        } else {
-            System.out.println("👥 Your friends:");
-            for (String friend : currentUser.getFriends()) {
-                System.out.println("- " + friend);
-            }
-        }
-    }
-
-    private static void viewPendingRequests() {
-        // Refresh current user to get latest requests
-        var freshUsers = org.ScubMembership.Utils.UserStorage.loadUsers();
-        var freshUser = freshUsers.get(loginPage.getCurrentUser().getUsername());
-        if (freshUser != null) {
-            loginPage.setCurrentUser(freshUser);
-        }
-
-        var currentUser = loginPage.getCurrentUser();
-        var receivedRequests = currentUser.getReceivedFriendRequest();
-
-        if (receivedRequests.isEmpty()) {
-            System.out.println("⚠️ You have no pending friend requests.");
-        } else {
-            System.out.println("📥 Pending friend requests:");
-            for (String request : receivedRequests) {
-                System.out.println("- " + request);
-            }
-        }
-    }
 }

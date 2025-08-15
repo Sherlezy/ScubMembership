@@ -15,7 +15,7 @@ public class FriendRecommender {
     public static List<NormalUser> getRecommendedFriends(NormalUser currentUser) {
         Map<NormalUser, Integer> scoreMap = new HashMap<>();
         Map<String, NormalUser> users = UserStorage.loadUsers();
-        List<NormalUser> allUsers = new ArrayList<>(users.values());
+        Set<NormalUser> allUsers = new HashSet<>(users.values());
 
         for(NormalUser candidate : allUsers) {
             if(candidate.getUsername().equals(currentUser.getUsername())) continue;

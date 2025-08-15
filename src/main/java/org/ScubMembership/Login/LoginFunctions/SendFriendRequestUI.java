@@ -1,5 +1,6 @@
 package org.ScubMembership.Login.LoginFunctions;
 
+import org.ScubMembership.Friends.AbstractFriends;
 import org.ScubMembership.Login.LoginPage;
 import org.ScubMembership.Users.NormalUser.NormalUser;
 import org.ScubMembership.Utils.UserStorage;
@@ -10,13 +11,12 @@ import java.util.Scanner;
 
 import static org.ScubMembership.Friends.FriendRecommender.getRecommendedFriends;
 
-public class SendFriendRequestUI {
-    private final LoginPage loginPage;
-
+public class SendFriendRequestUI extends AbstractFriends {
     public SendFriendRequestUI(LoginPage loginPage) {
-        this.loginPage = loginPage;
+        super(loginPage);
     }
 
+    @Override
     public void execute() {
         Scanner scanner = loginPage.getScanner();
         HashMap<String, NormalUser> loginInfo = loginPage.getLoginInfo();
@@ -30,11 +30,10 @@ public class SendFriendRequestUI {
 
         String choice = scanner.nextLine();
 
-        NormalUser currentUser = loginPage.getCurrentUser();
-
         // Refresh currentUser from disk for latest friend requests
         refreshCurrentUser();
-
+        NormalUser currentUser = loginPage.getCurrentUser();
+        
         switch (choice) {
             case "1":
                 List<NormalUser> recommendedFriends = getRecommendedFriends(currentUser);
@@ -174,14 +173,6 @@ public class SendFriendRequestUI {
             default:
                 System.out.println("❌ Invalid choice.");
                 break;
-        }
-    }
-
-    private void refreshCurrentUser() {
-        HashMap<String, NormalUser> freshUsers = UserStorage.loadUsers();
-        NormalUser freshUser = freshUsers.get(loginPage.getCurrentUser().getUsername());
-        if (freshUser != null) {
-            loginPage.setCurrentUser(freshUser);
         }
     }
 }
