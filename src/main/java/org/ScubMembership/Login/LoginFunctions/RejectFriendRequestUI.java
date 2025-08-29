@@ -10,6 +10,11 @@ public class RejectFriendRequestUI extends AbstractFriendRequestUI {
     }
 
     @Override
+    protected String getActionVerb() {
+        return "reject";
+    }
+
+    @Override
     protected void handleRequest(NormalUser currentUser, NormalUser senderUser) {
         // Remove from received and sent lists
         currentUser.getReceivedFriendRequest().remove(senderUser.getUsername());

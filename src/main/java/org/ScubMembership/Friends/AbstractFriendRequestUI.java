@@ -20,6 +20,8 @@ public abstract class AbstractFriendRequestUI extends AbstractFriends{
 
         List<String> receivedRequests = new ArrayList<>(currentUser.getReceivedFriendRequest());
 
+        System.out.println();
+
         if(receivedRequests.isEmpty()) {
             System.out.println("⚠\uFE0F No friend requests.");
             return;
@@ -30,7 +32,7 @@ public abstract class AbstractFriendRequestUI extends AbstractFriends{
             System.out.printf("%d. %s%n", i + 1, receivedRequests.get(i));
         }
 
-        System.out.print("Enter the number of the friend request to reject (0 to cancel): ");
+        System.out.printf("Enter the number of the friend request to %s (0 to cancel): ", getActionVerb());
         int selected = getValidSelection(receivedRequests.size());
         if(selected == 0) {
             System.out.println("Cancelled");
@@ -53,6 +55,8 @@ public abstract class AbstractFriendRequestUI extends AbstractFriends{
     }
 
     protected abstract void handleRequest(NormalUser currentUser, NormalUser senderUser);
+
+    protected abstract String getActionVerb();
 
     private int getValidSelection(int max) {
         try {

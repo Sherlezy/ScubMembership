@@ -10,6 +10,11 @@ public class AcceptFriendRequestUI extends AbstractFriendRequestUI {
     }
 
     @Override
+    protected String getActionVerb() {
+        return "accept";
+    }
+
+    @Override
     protected void handleRequest(NormalUser currentUser, NormalUser senderUser) {
         // Accept the request
         currentUser.getFriends().add(senderUser.getUsername());
